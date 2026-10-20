@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Көшбасшы 360</title>
+<title>Топ тесттері</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&family=Montserrat:wght@600;700;800&display=swap">
@@ -179,7 +179,7 @@ textarea { min-height: 96px; resize: vertical; line-height: 1.45; }
 .quote { border-left: 3px solid var(--accent); padding: 4px 0 4px 12px; font-size: 15px; }
 
 /* Admin */
-.tabs { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: var(--surface-2); overflow-x: auto; }
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 12px; background: var(--surface-2); }
 .tabs button { flex: 1 1 auto; min-height: 42px; padding: 0 8px; font-size: 15px; border: 0; border-radius: 9px; background: transparent; font-weight: 600; color: var(--muted); white-space: nowrap; }
 .tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
 .leader { background: var(--gold-soft); border-radius: var(--r); padding: 22px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: center; }
@@ -226,6 +226,44 @@ tbody th button { background: none; border: 0; padding: 0; font-weight: 600; col
 .toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-size: 14px; z-index: 20; max-width: calc(100% - 32px); }
 .devbar { background: var(--gold-soft); color: var(--ink); font-size: 13px; padding: 8px 16px; text-align: center; }
 section h3 { font-size: 18px; font-weight: 700; }
+/* Portal + Es test */
+.tlist { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.tcard { display: flex; flex-direction: column; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; }
+.tcard h3 { font-size: 20px; }
+.tcard .row { margin-top: auto; }
+.qlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.qcard { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.qcard.missing { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad) inset; }
+.qtext { font-weight: 600; font-size: 16px; }
+.qno { color: var(--accent); font-family: var(--f-mono); margin-right: 6px; }
+.yn { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.yn button { min-height: 46px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-weight: 600; padding: 6px 10px; }
+.yn button[data-v="1"][aria-pressed="true"] { background: var(--good); border-color: var(--good); color: var(--surface); }
+.yn button[data-v="0"][aria-pressed="true"] { background: var(--muted); border-color: var(--muted); color: var(--surface); }
+.lv-hi { background: color-mix(in srgb, var(--good) 18%, var(--surface)); color: var(--good); }
+.lv-mid { background: var(--gold-soft); color: var(--gold); }
+.lv-lo { background: color-mix(in srgb, var(--bad) 14%, var(--surface)); color: var(--bad); }
+.lv-none { color: var(--muted); }
+.chrow { width: 100%; text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: grid; grid-template-columns: 28px minmax(0, 1fr) 60px; gap: 6px 12px; align-items: center; }
+.chrow .no { font-family: var(--f-mono); color: var(--muted); font-weight: 600; }
+.chrow .nm { font-weight: 600; overflow-wrap: anywhere; }
+.chrow .pc { text-align: right; font-family: var(--f-display); font-weight: 800; font-size: 18px; font-variant-numeric: tabular-nums; }
+.chrow .ibar { grid-column: 2 / 3; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
+.chrow .ibar i { display: block; height: 100%; }
+.chrow .sub { grid-column: 2 / -1; font-size: 13px; color: var(--muted); }
+.ans { display: flex; flex-direction: column; gap: 6px; padding: 12px 0; border-top: 1px solid var(--line); }
+.ans .who2 { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-weight: 600; }
+.ans .txt { font-size: 15px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.marks { display: flex; flex-wrap: wrap; gap: 6px; }
+.marks button { min-height: 34px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-size: 13px; font-weight: 600; color: var(--muted); }
+.marks button[aria-pressed="true"][data-m="ok"] { background: var(--good); border-color: var(--good); color: var(--surface); }
+.marks button[aria-pressed="true"][data-m="part"] { background: var(--gold); border-color: var(--gold); color: var(--surface); }
+.marks button[aria-pressed="true"][data-m="no"] { background: var(--bad); border-color: var(--bad); color: var(--surface); }
+details.key { background: var(--surface-2); border-radius: 10px; padding: 8px 12px; font-size: 14px; }
+details.key summary { cursor: pointer; font-weight: 600; min-height: 32px; display: flex; align-items: center; }
+.seg { display: flex; gap: 6px; flex-wrap: wrap; }
+.seg button { min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); font-weight: 600; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 </head>
@@ -244,7 +282,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbzoY2k1nsh8fZWnAviK3nvE
 
 const IS_GAS = typeof google !== 'undefined' && google.script && google.script.run;
 const IS_LOCAL = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.protocol === 'file:';
-const USE_MOCK = !IS_GAS && !API_URL && IS_LOCAL;
+const USE_MOCK = !IS_GAS && IS_LOCAL; // компьютерде ашқанда — тек жергілікті тексеру деректері
 
 function call(action, params) {
   const req = Object.assign({ action: action }, params || {});
@@ -280,7 +318,7 @@ const S = {
   person: null, people: [], config: null, open: true, reportsOpen: false,
   draft: null, step: 0, missing: false, report: null,
   pw: sess.get('k360-pw') || '', adm: null, tab: 'results', openRow: null, rater: null,
-  demo: false, confirm: null, rosterText: null, shareText: false,
+  demo: false, confirm: null, rosterText: null, shareText: false, adminTest: 'k360',
 };
 const $app = document.getElementById('app');
 
@@ -330,11 +368,15 @@ function progress() {
 function topbar() {
   let right = '';
   if (S.person && ['intro', 'rate', 'final', 'done', 'report'].indexOf(S.view) >= 0) {
-    right = '<span class="who">' + esc(S.person.name) + '</span>' + dial(30, progress()) + '<button class="btn sm ghost" data-act="logout">Шығу</button>';
+    right = '<button class="btn sm ghost" data-act="portal">Тесттер</button>' + dial(30, progress()) + '<button class="btn sm ghost" data-act="logout">Шығу</button>';
+  } else if (S.person && S.view.indexOf('es') === 0) {
+    right = '<button class="btn sm ghost" data-act="portal">Тесттер</button>' + dial(30, esProgress()) + '<button class="btn sm ghost" data-act="logout">Шығу</button>';
+  } else if (S.person && S.view === 'portal') {
+    right = '<span class="who">' + esc(S.person.name) + '</span><button class="btn sm ghost" data-act="logout">Шығу</button>';
   } else if (S.view === 'admin') {
     right = '<span class="who">Әкімші</span><button class="btn sm ghost" data-act="logout">Шығу</button>';
   }
-  return '<header class="top"><button class="brand link" style="text-decoration:none;color:var(--ink);padding:0" data-act="home">' + dial(26, 1) + 'Көшбасшы 360</button><div class="top-right">' + right + '</div></header>';
+  return '<header class="top"><button class="brand link" style="text-decoration:none;color:var(--ink);padding:0" data-act="home">' + dial(26, 1) + 'Топ тесттері</button><div class="top-right">' + right + '</div></header>';
 }
 
 const errBox = function () { return S.err ? '<div class="note err" role="alert">' + esc(S.err) + '</div>' : ''; };
@@ -344,8 +386,8 @@ const V = {};
 
 V.home = function () {
   return '<section class="hero">' +
-    '<h1>Көшбасшы 360</h1>' +
-    '<p class="lede">Топтағы әр адам өзін және топтастарын бағалайды. Жиынтық бағалардан топтың көшбасшысы анықталады.</p>' +
+    '<h1>Топ тесттері</h1>' +
+    '<p class="lede">Оқытушы берген жеке кодыңызбен кіріңіз. Бір код барлық тестті ашады.</p>' +
     '<form id="f-login" class="card login" autocomplete="off">' +
       '<label for="code">Жеке кодыңыз</label>' +
       '<input type="text" id="code" maxlength="12" spellcheck="false" autocapitalize="characters" placeholder="••••••" value="' + esc(S.code) + '">' +
@@ -353,7 +395,7 @@ V.home = function () {
       errBox() +
       '<p class="hint">Кодты оқытушыдан аласыз. Сол кодпен кез келген уақытта қайта кіріп, жалғастыра аласыз.</p>' +
     '</form>' +
-    '<ul class="facts"><li>6 құзырет, 12 тұжырым</li><li>Шамамен 15 минут</li><li>Жауаптар автоматты сақталады</li></ul>' +
+    '<ul class="facts"><li>Көшбасшы 360</li><li>Ес: не түсіндім?</li><li>Жауаптар автоматты сақталады</li></ul>' +
     '<div><button class="link" data-act="adminLogin">Әкімші ретінде кіру</button></div>' +
   '</section>';
 };
@@ -441,7 +483,7 @@ V.done = function () {
       ? '<button class="btn primary" data-act="report">Маған қойылған бағаны көру</button>'
       : '<div class="note">Оқытушы нәтижелерді ашқан соң, осы кодпен қайта кіріп, өзіңізге қойылған бағаларды (анонимді, орташа мәнмен) көре аласыз.</div>') +
     errBox() +
-    '<div class="row">' + (S.open ? '<button class="btn" data-act="edit">Жауаптарды өзгерту</button>' : '') + '<button class="btn ghost" data-act="logout">Шығу</button></div>' +
+    '<div class="row"><button class="btn primary" data-act="portal">Тесттер тізімі</button>' + (S.open ? '<button class="btn" data-act="edit">Жауаптарды өзгерту</button>' : '') + '</div>' +
   '</div>';
 };
 
@@ -694,12 +736,333 @@ function tabPeople() {
 }
 
 V.admin = function () {
+  const seg = '<div class="seg" role="group" aria-label="Тест">' + [['k360', 'Көшбасшы 360'], ['es', 'Ес: не түсіндім?']].map(function (t) {
+    return '<button data-act="admin-test" data-k="' + t[0] + '" aria-pressed="' + (S.adminTest === t[0]) + '">' + t[1] + '</button>';
+  }).join('') + '</div>';
+  if (S.adminTest === 'es') return '<div class="stack">' + seg + esAdminView() + '</div>';
   const tabs = [['results', 'Нәтиже'], ['matrix', 'Кім кімге'], ['people', 'Қатысушылар']];
   const body = S.tab === 'results' ? tabResults() : S.tab === 'matrix' ? tabMatrix() : tabPeople();
-  return '<div class="stack">' +
+  return '<div class="stack">' + seg +
     '<div class="tabs" role="tablist">' + tabs.map(function (t) { return '<button role="tab" aria-selected="' + (S.tab === t[0]) + '" data-act="tab" data-k="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>' +
     errBox() + body + '</div>';
 };
+
+/* ---------- Тесттер тізімі ---------- */
+V.portal = function () {
+  const n360 = S.config ? itemsOf(S.config).length : 0;
+  const st360 = !S.config ? null : S.draft.submitted ? 'done' : S.draft.step > 0 ? 'mid' : 'new';
+  const stEs = !ES.ok ? null : ES.draft.submitted ? 'done' : ES.draft.step > 0 ? 'mid' : 'new';
+  const badge = function (st, mid) {
+    if (st === 'done') return '<span class="status ok">аяқталды</span>';
+    if (st === 'mid') return '<span class="status mid">' + mid + '</span>';
+    if (st === 'new') return '<span class="status">басталмаған</span>';
+    return '<span class="status">қолжетімсіз</span>';
+  };
+  const btn = function (st, act) {
+    if (!st) return '';
+    return '<button class="btn ' + (st === 'done' ? '' : 'primary') + '" data-act="' + act + '">' + (st === 'done' ? 'Ашу' : st === 'mid' ? 'Жалғастыру' : 'Бастау') + '</button>';
+  };
+  const esCh = ES.config ? ES.config.chapters.length : 0;
+  return '<div class="stack" style="padding-top:4px">' +
+    '<h1 style="font-size:clamp(28px,6vw,38px)">Сәлем, ' + esc(S.person.name.split(' ')[0]) + '!</h1>' +
+    '<p class="muted">Тестті таңдаңыз. Әр тесттің жауабы бөлек сақталады.</p>' +
+    '<div class="tlist">' +
+      '<div class="tcard"><div class="row" style="justify-content:space-between"><h3>Көшбасшы 360</h3>' + badge(st360, (S.draft ? Math.min(S.draft.step, n360) : 0) + ' / ' + n360) + '</div>' +
+        '<p class="small muted">Өзіңізді және топтастарыңызды 12 тұжырым бойынша бағалайсыз. Шамамен 15 минут.</p><div class="row">' + btn(st360, 'open-k360') + '</div></div>' +
+      '<div class="tcard"><div class="row" style="justify-content:space-between"><h3>Ес: не түсіндім?</h3>' + badge(stEs, (ES.draft ? Math.min(ES.draft.step, esCh) : 0) + ' / ' + esCh + ' тарау') + '</div>' +
+        '<p class="small muted">«Ес» сайтының әр тарауы бойынша не түсінгеніңізді білеміз. Баға қойылмайды. Шамамен 30 минут.</p><div class="row">' + btn(stEs, 'es-open') + '</div></div>' +
+    '</div>' + errBox() +
+  '</div>';
+};
+
+/* ---------- «Ес: не түсіндім?» — студент беті ---------- */
+const ES = { ok: false, config: null, draft: null, open: true, step: 0, missing: false };
+const EA = { adm: null, tab: 'chapters', ch: 's01', student: null, confirm: null };
+const ES_MIN = 10;
+function esFresh() { return { ans: {}, unclear: {}, step: 0, submitted: false }; }
+function esQs(cfg) { const out = []; cfg.chapters.forEach(function (c, ci) { c.qs.forEach(function (q) { out.push({ id: q.id, ch: c.id, chNo: ci + 1, chTitle: c.title, text: q.text, key: q.key }); }); }); return out; }
+function esAnswered(q) { const a = ES.draft.ans[q]; return !!a && (a.y === false || (a.y === true && String(a.t || '').trim().length >= ES_MIN)); }
+function esProgress() { if (!ES.draft || !ES.config) return 0; const qs = esQs(ES.config); return qs.filter(function (q) { return esAnswered(q.id); }).length / qs.length; }
+
+V.esIntro = function () {
+  const n = esQs(ES.config).length, chs = ES.config.chapters.length, started = ES.draft.step > 0;
+  return '<div class="stack">' +
+    '<div><div class="eyebrow">«Ес» сайты бойынша</div><h1 style="font-size:clamp(28px,6vw,38px);margin-top:4px">Ес: не түсіндім?</h1></div>' +
+    (!ES.open ? '<div class="note warn">Тест қазір жабық. Жауаптарды сақтау мүмкін емес.</div>' : '') +
+    '<div class="card stack"><ol class="steps">' +
+      '<li>Бұл — баға емес. Оқытушы әр тарауды қаншалықты түсінгеніңізді білгісі келеді.</li>' +
+      '<li>' + chs + ' тарау, барлығы ' + n + ' сұрақ. Әр сұраққа «Иә» немесе «Жоқ» деп жауап беріңіз.</li>' +
+      '<li>«Иә» десеңіз, өз сөзіңізбен 1–3 сөйлеммен түсіндіріңіз. Дәл анықтама керек емес, ойыңызды жеткізсеңіз болды.</li>' +
+      '<li>Білмесеңіз немесе сенімді болмасаңыз, «Жоқ» деңіз. Бұл қалыпты жағдай, ешнәрсе жазудың қажеті жоқ.</li>' +
+      '<li>Сайтқа немесе басқа дереккөзге қарамай, тек өз біліміңізбен жауап беріңіз.</li>' +
+      '<li>Әр тарау соңында сақталады. Үзіліс жасап, кейін сол кодпен жалғастыра аласыз.</li>' +
+    '</ol></div>' +
+    '<div class="row"><button class="btn primary" data-act="es-start"' + (!ES.open ? ' disabled' : '') + '>' + (started ? 'Жалғастыру (' + Math.min(ES.draft.step + 1, chs) + '-тараудан)' : 'Бастау') + '</button></div>' +
+  '</div>';
+};
+
+V.esCh = function () {
+  const chs = ES.config.chapters, c = chs[ES.step], last = ES.step === chs.length - 1;
+  let no = 0; chs.slice(0, ES.step).forEach(function (x) { no += x.qs.length; });
+  const qs = c.qs.map(function (q, i) {
+    const a = ES.draft.ans[q.id];
+    const yes = a && a.y === true, nope = a && a.y === false;
+    const miss = ES.missing && !esAnswered(q.id);
+    return '<li class="qcard' + (miss ? ' missing' : '') + '">' +
+      '<p class="qtext"><span class="qno">' + (no + i + 1) + '.</span>' + esc(q.text) + '</p>' +
+      '<div class="yn" role="group" aria-label="Түсіндіре аласыз ба?">' +
+        '<button type="button" data-act="es-yn" data-q="' + q.id + '" data-v="1" aria-pressed="' + yes + '">Иә, түсіндіре аламын</button>' +
+        '<button type="button" data-act="es-yn" data-q="' + q.id + '" data-v="0" aria-pressed="' + nope + '">Жоқ / сенімді емеспін</button>' +
+      '</div>' +
+      (yes ? '<div class="field"><label for="t-' + q.id + '">Өз сөзіңізбен қысқаша түсіндіріңіз</label><textarea id="t-' + q.id + '" rows="3" maxlength="2000" placeholder="1–3 сөйлем жеткілікті">' + esc(a.t || '') + '</textarea></div>' : '') +
+    '</li>';
+  }).join('');
+  return '<div class="rate-head">' +
+      '<div class="meta"><span>Тарау ' + (ES.step + 1) + ' / ' + chs.length + '</span><span class="num">' + c.qs.length + ' сұрақ</span></div>' +
+      '<div class="bar"><i style="width:' + (ES.step / chs.length * 100).toFixed(1) + '%"></i></div>' +
+      '<h2 class="stmt">' + esc(c.title) + '</h2>' +
+    '</div>' +
+    '<ol class="qlist" style="margin-top:14px">' + qs + '</ol>' +
+    '<div class="field" style="margin-top:16px"><label for="u-' + c.id + '">Бұл тарауда түсініксіз болған жер бар ма? <span class="muted small">(міндетті емес)</span></label>' +
+      '<textarea id="u-' + c.id + '" rows="2" maxlength="1000" placeholder="Мысалы: интерференцияның екі түрін шатастырамын">' + esc(ES.draft.unclear[c.id] || '') + '</textarea></div>' +
+    errBox() +
+    '<div class="navbar"><button class="btn" data-act="es-prev">Артқа</button><button class="btn primary" data-act="es-next"' + (S.busy ? ' disabled' : '') + '>' +
+      (S.busy ? 'Сақталуда…' : last ? (ES.draft.submitted ? 'Өзгерістерді сақтау' : 'Аяқтау және жіберу') : 'Келесі тарау') + '</button></div>';
+};
+
+V.esDone = function () {
+  const qs = esQs(ES.config), yes = qs.filter(function (q) { const a = ES.draft.ans[q.id]; return a && a.y; }).length;
+  return '<div class="stack" style="padding-top:20px;align-items:flex-start">' +
+    '<div class="done-mark"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>' +
+    '<h2 style="font-size:clamp(26px,6vw,34px)">Рахмет, ' + esc(S.person.name.split(' ')[0]) + '!</h2>' +
+    '<p>Жауаптарыңыз сақталды. Сіз ' + qs.length + ' сұрақтың ' + yes + '-не «Иә» дедіңіз.</p>' +
+    '<p class="small muted">«Жоқ» деген тақырыптарды сайттан қайта оқып шығуға болады: <a href="' + esc(ES.config.site) + '" target="_blank" rel="noopener">«Ес» сайты</a>.</p>' +
+    errBox() +
+    '<div class="row"><button class="btn primary" data-act="portal">Тесттер тізімі</button>' + (ES.open ? '<button class="btn" data-act="es-edit">Жауаптарды өзгерту</button>' : '') + '</div>' +
+  '</div>';
+};
+
+async function esSave() {
+  S.busy = true; S.err = ''; render();
+  try { await call('es_save', { code: S.code, data: ES.draft }); S.busy = false; return true; }
+  catch (e) { S.busy = false; S.err = e.message; render(); return false; }
+}
+
+/* ---------- «Ес» — әкімші беті ---------- */
+function esLevel(f) { return f == null ? 'lv-none' : f >= 0.75 ? 'lv-hi' : f >= 0.4 ? 'lv-mid' : 'lv-lo'; }
+function esLevelColor(f) { return f == null ? 'var(--line)' : f >= 0.75 ? 'var(--good)' : f >= 0.4 ? 'var(--gold)' : 'var(--bad)'; }
+
+function esStats(A) {
+  const qs = esQs(A.config), ids = {};
+  A.people.forEach(function (p) { ids[p.id] = true; });
+  const ans = A.answers.filter(function (a) { return ids[a.id]; });
+  const byId = {}; ans.forEach(function (a) { byId[a.id] = a; });
+  const chapters = A.config.chapters.map(function (c, ci) {
+    let yes = 0, tot = 0;
+    const qrows = c.qs.map(function (q) {
+      let y = 0, n = 0; const m = { ok: 0, part: 0, no: 0 };
+      ans.forEach(function (a) {
+        const x = a.data.ans && a.data.ans[q.id]; if (!x) return;
+        if (x.y) { y++; const mk = A.marks[a.id + '|' + q.id]; if (mk) m[mk]++; } else n++;
+      });
+      yes += y; tot += y + n;
+      return { id: q.id, text: q.text, key: q.key, yes: y, no: n, marks: m };
+    });
+    const unclear = ans.filter(function (a) { return a.data.unclear && a.data.unclear[c.id]; }).map(function (a) { return { id: a.id, name: a.name, t: a.data.unclear[c.id] }; });
+    return { id: c.id, no: ci + 1, title: c.title, yes: yes, total: tot, frac: tot ? yes / tot : null, qs: qrows, unclear: unclear };
+  });
+  const students = A.people.map(function (p) {
+    const a = byId[p.id]; let yes = 0, tot = 0;
+    const per = {};
+    A.config.chapters.forEach(function (c) {
+      let y = 0, t = 0;
+      c.qs.forEach(function (q) { const x = a && a.data.ans && a.data.ans[q.id]; if (!x) return; t++; if (x.y) y++; });
+      per[c.id] = { yes: y, total: t, frac: t ? y / t : null }; yes += y; tot += t;
+    });
+    return { id: p.id, name: p.name, a: a, per: per, yes: yes, total: tot, frac: tot ? yes / tot : null };
+  });
+  return { qs: qs, chapters: chapters, students: students, done: ans.filter(function (a) { return a.submitted; }).length, started: ans.length };
+}
+
+function esMarkBtns(pid, qid) {
+  const cur = EA.adm.marks[pid + '|' + qid] || '';
+  return '<div class="marks" role="group" aria-label="Түсінігі">' + [['ok', '✓ Дұрыс түсінген'], ['part', '~ Жартылай'], ['no', '✗ Қате түсінген']].map(function (m) {
+    return '<button data-act="es-mark" data-p="' + esc(pid) + '" data-q="' + qid + '" data-m="' + m[0] + '" aria-pressed="' + (cur === m[0]) + '">' + m[1] + '</button>';
+  }).join('') + '</div>';
+}
+
+function esAnswerRow(pid, name, q, a) {
+  const x = a && a.data.ans && a.data.ans[q.id];
+  const chip = !x ? '<span class="status">жауап жоқ</span>' : x.y ? '<span class="status ok">Иә</span>' : '<span class="status">Жоқ</span>';
+  return '<div class="ans"><div class="who2">' + esc(name) + chip + '</div>' +
+    (x && x.y ? '<div class="txt">' + esc(x.t) + '</div>' + esMarkBtns(pid, q.id) : '') + '</div>';
+}
+
+function esTabChapters(T) {
+  const hard = T.chapters.filter(function (c) { return c.frac != null; }).slice().sort(function (a, b) { return a.frac - b.frac; }).slice(0, 3);
+  const rows = T.chapters.map(function (c) {
+    const f = c.frac;
+    return '<li><button class="chrow" data-act="es-goch" data-k="' + c.id + '">' +
+      '<span class="no">' + c.no + '</span><span class="nm">' + esc(c.title) + '</span><span class="pc" style="color:' + esLevelColor(f) + '">' + (f == null ? '—' : Math.round(f * 100) + '%') + '</span>' +
+      '<span class="ibar"><i style="width:' + (f == null ? 0 : f * 100).toFixed(1) + '%;background:' + esLevelColor(f) + '"></i></span>' +
+      '<span class="sub">«Иә» жауаптары: ' + c.yes + ' / ' + c.total + (c.unclear.length ? ' · түсініксіз жері туралы ' + c.unclear.length + ' пікір' : '') + '</span>' +
+    '</button></li>';
+  }).join('');
+  return '<p class="small muted">Тестті аяқтағандар: <b>' + T.done + ' / ' + T.students.length + '</b>' + (T.started > T.done ? ', жолда: ' + (T.started - T.done) : '') + '. Пайыз — студенттердің «Иә, түсіндіре аламын» деген жауаптарының үлесі.</p>' +
+    (hard.length ? '<div class="note warn"><b>Ең қиын тараулар:</b> ' + hard.map(function (c) { return c.no + '. ' + esc(c.title) + ' (' + Math.round(c.frac * 100) + '%)'; }).join('; ') + '</div>' : '<div class="note">Әзірге жауап жоқ.</div>') +
+    '<ol class="rank">' + rows + '</ol>' +
+    '<p class="small muted">Тарауды бассаңыз, сол тараудың сұрақтары мен әр студенттің жауабы ашылады.</p>';
+}
+
+function esTabStudents(T) {
+  const chs = EA.adm.config.chapters;
+  const head = '<tr><th>Студент</th>' + chs.map(function (c, i) { return '<th title="' + esc(c.title) + '">' + (i + 1) + '</th>'; }).join('') + '<th>Барлығы</th></tr>';
+  const body = T.students.map(function (st) {
+    const status = !st.a ? ' <span class="status">кірмеген</span>' : st.a.submitted ? '' : ' <span class="status mid">жолда</span>';
+    return '<tr><th><button data-act="es-student" data-id="' + esc(st.id) + '">' + esc(st.name) + '</button>' + status + '</th>' +
+      chs.map(function (c) { const x = st.per[c.id]; return '<td class="h ' + esLevel(x.frac) + '">' + (x.total ? x.yes + '/' + x.total : '—') + '</td>'; }).join('') +
+      '<td class="h ' + esLevel(st.frac) + '">' + (st.frac == null ? '—' : Math.round(st.frac * 100) + '%') + '</td></tr>';
+  }).join('');
+  let det = '';
+  const st = EA.student && T.students.find(function (x) { return x.id === EA.student; });
+  if (st) {
+    det = '<section class="card stack"><div class="row" style="justify-content:space-between"><h3>' + esc(st.name) + '</h3><button class="btn sm ghost" data-act="es-student" data-id="">Жабу</button></div>' +
+      (!st.a ? '<p class="muted">Бұл студент тестті әлі бастаған жоқ.</p>' : chs.map(function (c, ci) {
+        const un = st.a.data.unclear && st.a.data.unclear[c.id];
+        return '<div class="stack" style="gap:4px"><b>' + (ci + 1) + '. ' + esc(c.title) + '</b>' +
+          c.qs.map(function (q) { return '<div class="small muted" style="margin-top:6px">' + esc(q.text) + '</div>' + esAnswerRow(st.id, st.name, q, st.a); }).join('') +
+          (un ? '<p class="quote small">Түсініксіз жері: ' + esc(un) + '</p>' : '') + '</div>';
+      }).join('')) + '</section>';
+  }
+  return '<p class="small muted">Ұяшықта: «Иә» деген сұрақтар / жауап берген сұрақтар. Жасыл — көбін түсінген, сары — жартылай, қызыл — көбін түсінбеген. Бағандар — тарау нөмірлері (тышқанды апарсаңыз, атауы шығады). Студенттің атын бассаңыз, барлық жауабы ашылады.</p>' +
+    det + '<div class="tbox"><table><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>';
+}
+
+function esTabAnswers(T) {
+  const c = T.chapters.find(function (x) { return x.id === EA.ch; }) || T.chapters[0];
+  const byId = {}; EA.adm.answers.forEach(function (a) { byId[a.id] = a; });
+  const sel = '<div class="field"><label for="es-ch">Тарау</label><select id="es-ch">' + T.chapters.map(function (x) {
+    return '<option value="' + x.id + '"' + (x.id === c.id ? ' selected' : '') + '>' + x.no + '. ' + esc(x.title) + (x.frac == null ? '' : ' — ' + Math.round(x.frac * 100) + '%') + '</option>';
+  }).join('') + '</select></div>';
+  const qcards = c.qs.map(function (q) {
+    const marked = q.marks.ok + q.marks.part + q.marks.no;
+    return '<section class="card stack"><p class="qtext">' + esc(q.text) + '</p>' +
+      '<details class="key"><summary>Негізгі ой (тек сізге көрінеді)</summary><p style="margin-top:6px">' + esc(q.key) + '</p></details>' +
+      '<p class="small muted">Иә: <b>' + q.yes + '</b> · Жоқ: <b>' + q.no + '</b>' + (marked ? ' · белгіленгені: ✓ ' + q.marks.ok + ', ~ ' + q.marks.part + ', ✗ ' + q.marks.no : '') + '</p>' +
+      '<div>' + EA.adm.people.map(function (p) { return esAnswerRow(p.id, p.name, { id: q.id }, byId[p.id]); }).join('') + '</div></section>';
+  }).join('');
+  const un = c.unclear.length ? '<section class="card stack"><h3>Түсініксіз болған жерлер</h3>' + c.unclear.map(function (u) { return '<p class="quote"><b>' + esc(u.name) + ':</b> ' + esc(u.t) + '</p>'; }).join('') + '</section>' : '';
+  return sel + '<p class="small muted">Студенттің жазғанын оқып, түсінігін белгілеуге болады. Бұл баға емес, тек өзіңізге арналған белгі.</p>' + qcards + un;
+}
+
+function esTabPeople(T) {
+  const conf = function (id) {
+    return EA.confirm === id ? '<div class="confirm" style="grid-column:1/-1"><span>' + esc(nameOf2(id)) + ' жауаптары толық өшіріледі.</span><button class="btn sm danger" data-act="es-reset-yes">Иә, өшіру</button><button class="btn sm" data-act="es-reset-no">Болдырмау</button></div>' : '';
+  };
+  const list = T.students.map(function (st) {
+    const s = !st.a ? '<span class="status">кірмеген</span>' : st.a.submitted ? '<span class="status ok">аяқтады</span>' : '<span class="status mid">' + st.a.step + ' / ' + EA.adm.config.chapters.length + ' тарау</span>';
+    return '<li><div style="min-width:0"><div style="font-weight:600">' + esc(st.name) + '</div><div class="code">' + esc((EA.adm.people.find(function (p) { return p.id === st.id; }) || {}).code || '') + '</div></div>' +
+      '<div class="row" style="justify-content:flex-end">' + s + (st.a ? '<button class="btn sm ghost danger" data-act="es-reset" data-id="' + esc(st.id) + '">Жауабын өшіру</button>' : '') + '</div>' + conf(st.id) + '</li>';
+  }).join('');
+  return '<section class="card"><div class="switch"><div><b>Тест ашық</b><div class="hint">Өшірсеңіз, ешкім жауап жібере алмайды.</div></div><button class="toggle" role="switch" aria-checked="' + EA.adm.open + '" aria-label="Тест ашық" data-act="es-toggle"></button></div></section>' +
+    '<section class="stack"><div class="row" style="justify-content:space-between"><h3>Студенттер · ' + T.done + ' / ' + T.students.length + ' аяқтады</h3><button class="btn sm" data-act="es-refresh">Жаңарту</button></div><ul class="plist">' + list + '</ul>' +
+    '<p class="hint">Кодтар «Көшбасшы 360» тестімен бірдей. Студенттер сол кодпен кіріп, тізімнен осы тестті таңдайды.</p></section>' +
+    '<section class="card stack"><h3>Кестеге шығару</h3><div class="row"><button class="btn" data-act="es-export"' + (S.busy ? ' disabled' : '') + '>Google кестеге жазу</button>' +
+      (EA.adm.sheetUrl ? '<a class="btn ghost" href="' + esc(EA.adm.sheetUrl) + '" target="_blank" rel="noopener">«Ес — түсіну тесті» кестесін ашу</a>' : '') + '</div>' +
+      '<p class="hint">Кестеде «Жауаптар (оқуға)» парағында әр студенттің әр сұраққа жауабы тұрады. «Google кестеге жазу» оған «Жиынтық» парағын (студенттер × тараулар) қосады.</p></section>';
+}
+
+function nameOf2(id) { const p = EA.adm && EA.adm.people.find(function (x) { return x.id === id; }); return p ? p.name : id; }
+
+function esAdminView() {
+  if (!EA.adm) return S.busy ? '<p class="muted">Жүктелуде…</p>' : errBox() + '<div class="row"><button class="btn" data-act="es-refresh">Қайта жүктеу</button></div>';
+  const T = esStats(EA.adm);
+  const tabs = [['chapters', 'Тараулар'], ['students', 'Студенттер'], ['answers', 'Жауаптар'], ['people', 'Басқару']];
+  const body = EA.tab === 'chapters' ? esTabChapters(T) : EA.tab === 'students' ? esTabStudents(T) : EA.tab === 'answers' ? esTabAnswers(T) : esTabPeople(T);
+  return '<div class="tabs" role="tablist">' + tabs.map(function (t) { return '<button role="tab" aria-selected="' + (EA.tab === t[0]) + '" data-act="es-tab" data-k="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>' + errBox() + body;
+}
+
+async function esAdminCall(action, params, okMsg) {
+  S.busy = true; S.err = ''; render();
+  try { const d = await call(action, Object.assign({ pw: S.pw }, params || {})); if (d && d.config) EA.adm = d; S.busy = false; render(); if (okMsg) toast(okMsg); return d; }
+  catch (e) { S.busy = false; S.err = e.message; render(); return null; }
+}
+
+function esExportRows() {
+  const T = esStats(EA.adm);
+  const rows = [['Студент', 'Күйі'].concat(T.chapters.map(function (c) { return c.no + '. ' + c.title; })).concat(['Барлығы, %'])];
+  T.students.forEach(function (st) {
+    rows.push([st.name, !st.a ? 'кірмеген' : st.a.submitted ? 'аяқтады' : 'жолда'].concat(T.chapters.map(function (c) { const x = st.per[c.id]; return x.total ? x.yes + '/' + x.total : ''; })).concat([st.frac == null ? '' : Math.round(st.frac * 100)]));
+  });
+  rows.push(['Тарау бойынша, %', ''].concat(T.chapters.map(function (c) { return c.frac == null ? '' : Math.round(c.frac * 100); })).concat(['']));
+  return rows;
+}
+
+async function esClick(act, b) {
+  const chs = ES.config ? ES.config.chapters : [];
+  if (act === 'es-open') { go(ES.draft.submitted ? 'esDone' : 'esIntro'); return; }
+  if (act === 'es-start') { ES.step = Math.min(ES.draft.step || 0, chs.length - 1); ES.missing = false; go('esCh'); return; }
+  if (act === 'es-edit') { ES.step = 0; ES.missing = false; go('esCh'); return; }
+  if (act === 'es-yn') {
+    const q = b.getAttribute('data-q'), y = b.getAttribute('data-v') === '1';
+    const prev = ES.draft.ans[q] || {};
+    ES.draft.ans[q] = { y: y, t: prev.t || '' };
+    render();
+    if (y) { const t = document.getElementById('t-' + q); if (t) t.focus({ preventScroll: true }); }
+    return;
+  }
+  if (act === 'es-prev') { if (ES.step > 0) { ES.step--; ES.missing = false; go('esCh'); } else go('esIntro'); return; }
+  if (act === 'es-next') {
+    const c = chs[ES.step];
+    const miss = c.qs.filter(function (q) { return !esAnswered(q.id); });
+    if (miss.length) {
+      ES.missing = true;
+      const noText = miss.some(function (q) { return ES.draft.ans[q.id] && ES.draft.ans[q.id].y; });
+      S.err = noText ? '«Иә» деген сұрақтарға өз сөзіңізбен қысқаша жауап жазыңыз (бірнеше сөз).' : 'Әр сұраққа «Иә» немесе «Жоқ» деп жауап беріңіз.';
+      render();
+      const first = document.querySelector('.qcard.missing'); if (first) first.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      return;
+    }
+    ES.missing = false;
+    const last = ES.step === chs.length - 1;
+    const prev = { step: ES.draft.step, submitted: ES.draft.submitted };
+    ES.draft.step = Math.max(ES.draft.step || 0, ES.step + 1);
+    if (last) ES.draft.submitted = true;
+    if (!(await esSave())) { ES.draft.step = prev.step; ES.draft.submitted = prev.submitted; render(); return; }
+    if (last) go('esDone'); else { ES.step++; go('esCh'); }
+    return;
+  }
+
+  /* әкімші */
+  if (act === 'admin-test') {
+    S.adminTest = b.getAttribute('data-k'); S.err = ''; render();
+    if (S.adminTest === 'es' && !EA.adm) await esAdminCall('es_admin');
+    return;
+  }
+  if (act === 'es-tab') { EA.tab = b.getAttribute('data-k'); S.err = ''; render(); return; }
+  if (act === 'es-goch') { EA.ch = b.getAttribute('data-k'); EA.tab = 'answers'; render(); window.scrollTo(0, 0); return; }
+  if (act === 'es-student') { EA.student = b.getAttribute('data-id') || null; render(); if (EA.student) window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+  if (act === 'es-refresh') { await esAdminCall('es_admin', {}, 'Жаңартылды'); return; }
+  if (act === 'es-toggle') { await esAdminCall('es_setOpen', { open: !EA.adm.open }, 'Сақталды'); return; }
+  if (act === 'es-reset') { EA.confirm = b.getAttribute('data-id'); render(); return; }
+  if (act === 'es-reset-no') { EA.confirm = null; render(); return; }
+  if (act === 'es-reset-yes') { const id = EA.confirm; EA.confirm = null; await esAdminCall('es_reset', { personId: id }, 'Жауап өшірілді'); return; }
+  if (act === 'es-mark') {
+    const pid = b.getAttribute('data-p'), qid = b.getAttribute('data-q'), m = b.getAttribute('data-m'), k = pid + '|' + qid;
+    const old = EA.adm.marks[k] || '', next = old === m ? '' : m;
+    if (next) EA.adm.marks[k] = next; else delete EA.adm.marks[k];
+    render();
+    try { await call('es_mark', { pw: S.pw, personId: pid, qid: qid, mark: next }); }
+    catch (e) { if (old) EA.adm.marks[k] = old; else delete EA.adm.marks[k]; S.err = e.message; render(); }
+    return;
+  }
+  if (act === 'es-export') {
+    S.busy = true; render();
+    try { const r = await call('es_export', { pw: S.pw, rows: esExportRows() }); S.busy = false; if (r && r.url) EA.adm.sheetUrl = r.url; render(); toast('Кестеге жазылды: «Жиынтық»'); }
+    catch (e) { S.busy = false; S.err = e.message; render(); }
+    return;
+  }
+}
 
 /* ---------- Сурет салу ---------- */
 function render() {
@@ -721,13 +1084,23 @@ async function doLogin() {
   if (!code) { S.err = 'Кодты енгізіңіз.'; render(); return; }
   S.busy = true; S.err = ''; S.code = code; render();
   try {
-    const d = await call('login', { code: code });
+    const res = await Promise.allSettled([call('login', { code: code }), call('es_login', { code: code })]);
+    if (res[0].status === 'rejected' && res[1].status === 'rejected') throw res[0].reason;
     local.set('k360-code', code);
-    Object.assign(S, { person: d.person, people: d.people, config: d.config, open: d.open, reportsOpen: d.reportsOpen });
-    S.draft = d.answer ? Object.assign(freshDraft(), JSON.parse(JSON.stringify(d.answer))) : freshDraft();
-    if (!Array.isArray(S.draft.nom)) S.draft.nom = [];
+    if (res[0].status === 'fulfilled') {
+      const d = res[0].value;
+      Object.assign(S, { person: d.person, people: d.people, config: d.config, open: d.open, reportsOpen: d.reportsOpen });
+      S.draft = d.answer ? Object.assign(freshDraft(), JSON.parse(JSON.stringify(d.answer))) : freshDraft();
+      if (!Array.isArray(S.draft.nom)) S.draft.nom = [];
+    }
+    if (res[1].status === 'fulfilled') {
+      const e2 = res[1].value;
+      S.person = S.person || e2.person;
+      Object.assign(ES, { ok: true, config: e2.config, open: e2.open });
+      ES.draft = e2.answer ? Object.assign(esFresh(), JSON.parse(JSON.stringify(e2.answer))) : esFresh();
+    } else ES.ok = false;
     S.busy = false;
-    go(S.draft.submitted ? 'done' : 'intro');
+    go('portal');
   } catch (e) { S.busy = false; S.err = e.message; render(); }
 }
 
@@ -796,10 +1169,13 @@ $app.addEventListener('input', function (e) {
   if (id === 'why' || id === 'general') S.draft[id] = e.target.value;
   if (id === 'roster') S.rosterText = e.target.value;
   if (id === 'code') S.code = e.target.value;
+  if (id.indexOf('t-') === 0 && ES.draft) { const q = id.slice(2); if (ES.draft.ans[q]) ES.draft.ans[q].t = e.target.value; }
+  if (id.indexOf('u-') === 0 && ES.draft) ES.draft.unclear[id.slice(2)] = e.target.value;
 });
 
 $app.addEventListener('change', function (e) {
   const id = e.target.id;
+  if (id === 'es-ch') { EA.ch = e.target.value; render(); return; }
   if (id === 'nom1' || id === 'nom2') {
     const k = id === 'nom1' ? 0 : 1;
     const nom = [S.draft.nom[0] || '', S.draft.nom[1] || ''];
@@ -828,9 +1204,13 @@ $app.addEventListener('click', async function (e) {
     if (ring) ring.outerHTML = dial(30, progress());
     return;
   }
-  if (act === 'home') { if (S.view === 'admin' || S.view === 'adminLogin') go('home'); else if (S.person) go(S.draft.submitted ? 'done' : 'intro'); else go('home'); return; }
+  if (act === 'home') { if (S.view === 'admin' || S.view === 'adminLogin') go('home'); else if (S.person) go('portal'); else go('home'); return; }
+  if (act === 'portal') { go('portal'); return; }
+  if (act === 'open-k360') { go(S.draft.submitted ? 'done' : 'intro'); return; }
+  if (act.indexOf('es') === 0 || act === 'admin-test') { await esClick(act, b); return; }
   if (act === 'logout') {
-    Object.assign(S, { person: null, draft: null, report: null, adm: null, pw: '', demo: false, demoData: null, confirm: null, rater: null, openRow: null });
+    Object.assign(S, { person: null, draft: null, report: null, adm: null, pw: '', demo: false, demoData: null, confirm: null, rater: null, openRow: null, adminTest: 'k360' });
+    Object.assign(ES, { person: null, config: null, draft: null, ok: false }); Object.assign(EA, { adm: null, student: null, confirm: null });
     sess.set('k360-pw', null); local.set('k360-code', null); S.code = '';
     go('home'); return;
   }
@@ -988,8 +1368,54 @@ const Mock = {
   },
   persist(st) { local.set('k360-mock', JSON.stringify(st)); },
   data(st) { return { people: st.people, answers: Object.values(st.answers), open: st.open, reportsOpen: st.reportsOpen, config: this.config, minRaters: 3, sheetUrl: '', appUrl: '' }; },
+  async esCfg() {
+    if (!this._es) { const src = await fetch('Es.gs').then(r => r.text()); this._es = new Function(src + ';return ES_CONFIG;')(); }
+    return this._es;
+  },
+  esSeed(st, cfg) {
+    if (st.es) return;
+    const r = rng(7), es = { answers: {}, marks: {}, open: true };
+    st.people.slice(1, 9).forEach((p, i) => {
+      const ans = {}, unclear = {};
+      cfg.chapters.forEach((c, ci) => {
+        const pY = 0.85 - ci * 0.035 - i * 0.03;
+        c.qs.forEach(q => { const y = r() < pY; ans[q.id] = { y, t: y ? 'Мысал жауап: ' + q.key.split('.')[0] + '.' : '' }; });
+        if (r() < 0.15) unclear[c.id] = 'Бұл тараудың кей жерлері түсініксіз болды (мысал пікір).';
+      });
+      const done = i < 6, step = done ? cfg.chapters.length : 5;
+      if (!done) cfg.chapters.slice(5).forEach(c => c.qs.forEach(q => delete ans[q.id]));
+      es.answers[p.id] = { id: p.id, name: p.name, step, submitted: done, updated: Date.now(), data: { ans, unclear, step, submitted: done } };
+    });
+    st.es = es;
+  },
+  async esApi(req, st, who, pw) {
+    const cfg = await this.esCfg();
+    this.esSeed(st, cfg);
+    const E = st.es;
+    const pub = { title: cfg.title, site: cfg.site, chapters: cfg.chapters.map(c => ({ id: c.id, title: c.title, qs: c.qs.map(q => ({ id: q.id, text: q.text })) })) };
+    const adm = () => ({ people: st.people, answers: Object.values(E.answers), marks: E.marks, open: E.open, config: cfg, sheetUrl: '' });
+    if (req.action === 'es_login') { const p = who(); const a = E.answers[p.id]; return { person: { id: p.id, name: p.name }, answer: a ? a.data : null, open: E.open, config: pub }; }
+    if (req.action === 'es_save') { const p = who(); if (!E.open) throw new Error('Тест жабық. Оқытушыға хабарласыңыз.'); const d = JSON.parse(JSON.stringify(req.data)); E.answers[p.id] = { id: p.id, name: p.name, step: d.step, submitted: d.submitted, updated: Date.now(), data: d }; return { saved: Date.now() }; }
+    pw();
+    if (req.action === 'es_admin') return adm();
+    if (req.action === 'es_mark') { const k = req.personId + '|' + req.qid; if (req.mark) E.marks[k] = req.mark; else delete E.marks[k]; return { ok: true }; }
+    if (req.action === 'es_setOpen') { E.open = req.open === true; return adm(); }
+    if (req.action === 'es_reset') { delete E.answers[req.personId]; return adm(); }
+    if (req.action === 'es_export') return { url: '' };
+    throw new Error('Белгісіз әрекет');
+  },
   api(req) {
     const self = this;
+    if (String(req.action).indexOf('es_') === 0) {
+      return new Promise(r => setTimeout(r, 250)).then(async () => {
+        const st = self.load();
+        const who = () => { const p = st.people.find(x => x.code === String(req.code || '').toUpperCase()); if (!p) throw new Error('Код табылмады. Әріптерді тексеріп, қайта енгізіңіз.'); return p; };
+        const pw = () => { if (req.pw !== 'local-test') throw new Error('Құпиясөз қате.'); };
+        const out = await self.esApi(req, st, who, pw);
+        self.persist(st);
+        return JSON.parse(JSON.stringify(out));
+      });
+    }
     return new Promise(function (resolve, reject) {
       setTimeout(function () {
         const st = self.load();
