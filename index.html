@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Көшбасшы 360</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&family=Montserrat:wght@600;700;800&display=swap">
+<style>
+/* Layout: one narrow column (≤780px) — a phone-first survey; admin tables scroll inside their own boxes. */
+:root {
+  --bg: #F2F4F8;
+  --surface: #FFFFFF;
+  --surface-2: #E9EDF5;
+  --ink: #121A2A;
+  --muted: #586379;
+  --line: #D8DEEA;
+  --accent: #2F4BD8;
+  --accent-soft: #E2E7FC;
+  --on-accent: #FFFFFF;
+  --gold: #9A5A00;
+  --gold-soft: #FBEFD7;
+  --good: #1C7A4D;
+  --bad: #B42318;
+  --f-display: "Montserrat", "Golos Text", system-ui, sans-serif;
+  --f-body: "Golos Text", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --r: 14px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0D1220;
+    --surface: #151C2C;
+    --surface-2: #1D2638;
+    --ink: #E7EBF3;
+    --muted: #9AA4B8;
+    --line: #2A3448;
+    --accent: #8EA2FF;
+    --accent-soft: #232E57;
+    --on-accent: #0D1220;
+    --gold: #F2B54A;
+    --gold-soft: #37290F;
+    --good: #4CC38A;
+    --bad: #F97066;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.5 var(--f-body);
+  padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
+}
+[hidden] { display: none !important; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { touch-action: manipulation; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--f-display); line-height: 1.2; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+
+.wrap { max-width: 780px; margin: 0 auto; padding-inline: 16px; padding-block: 0 56px; }
+.stack { display: flex; flex-direction: column; gap: 16px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+.mono { font-family: var(--f-mono); letter-spacing: .04em; }
+.num { font-variant-numeric: tabular-nums; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* Top bar */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 14px; }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--f-display); font-weight: 800; font-size: 17px; letter-spacing: -.01em; white-space: nowrap; }
+.brand svg { flex: none; }
+.top-right { display: flex; align-items: center; gap: 8px; min-width: 0; }
+@media (max-width: 480px) { .who { display: none; } }
+.who { font-size: 14px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40vw; }
+
+/* Buttons */
+.btn { min-height: 46px; padding: 0 20px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.btn.ghost { background: transparent; }
+.btn.danger { color: var(--bad); }
+.btn.sm { min-height: 38px; padding: 0 12px; font-size: 14px; border-radius: 10px; }
+.btn[disabled] { opacity: .55; cursor: default; }
+.link { background: none; border: 0; padding: 10px 4px; color: var(--accent); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; min-height: 44px; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 20px; }
+.note { border-radius: 12px; padding: 12px 14px; background: var(--surface-2); font-size: 14px; }
+.note.err { background: color-mix(in srgb, var(--bad) 12%, var(--surface)); color: var(--bad); }
+.note.warn { background: var(--gold-soft); color: var(--ink); }
+
+label { font-weight: 600; font-size: 15px; }
+input[type=text], input[type=password], select, textarea {
+  width: 100%; min-height: 48px; padding: 10px 14px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--surface); font-size: 16px;
+}
+textarea { min-height: 96px; resize: vertical; line-height: 1.45; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.hint { font-size: 13px; color: var(--muted); }
+
+/* Home */
+.hero { display: flex; flex-direction: column; gap: 22px; padding-top: 12px; }
+.hero h1 { font-size: clamp(34px, 8vw, 54px); font-weight: 800; letter-spacing: -.02em; }
+.hero .lede { font-size: 18px; color: var(--muted); max-width: 34em; }
+.login { display: flex; flex-direction: column; gap: 12px; max-width: 420px; }
+.login input { font-family: var(--f-mono); font-size: 22px; letter-spacing: .18em; text-transform: uppercase; text-align: center; }
+.facts { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 18px; color: var(--muted); font-size: 14px; }
+.facts li::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-right: 8px; vertical-align: middle; }
+
+/* Intro */
+.steps { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 10px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; background: var(--surface-2); border-radius: 999px; padding: 4px 10px 4px 4px; font-size: 13px; }
+.legend b { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--surface); font-family: var(--f-mono); font-size: 12px; }
+
+/* Progress */
+.bar { height: 6px; border-radius: 6px; background: var(--surface-2); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--accent); border-radius: 6px; transition: width .3s; }
+
+/* Rating screen */
+.rate-head { position: sticky; top: 0; z-index: 5; background: var(--bg); padding-block: 10px 12px; margin-inline: -16px; padding-inline: 16px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 8px; }
+.rate-head .meta { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); }
+.stmt { font-size: clamp(19px, 4.6vw, 24px); font-weight: 700; }
+.stmt small { display: block; font-family: var(--f-body); font-weight: 500; font-size: 13px; color: var(--muted); margin-bottom: 2px; }
+.rows { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.rrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px 14px; padding: 10px 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.rrow.self { background: var(--accent-soft); border-color: transparent; }
+.rrow.missing { border-color: var(--bad); box-shadow: 0 0 0 1px var(--bad) inset; }
+.rname { font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+.tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin-left: 6px; }
+.scale { display: grid; grid-template-columns: repeat(5, 44px) 40px; gap: 6px; }
+.sc { height: 44px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-family: var(--f-mono); font-weight: 600; font-size: 16px; }
+.sc.na { color: var(--muted); }
+.sc[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.sc.na[aria-pressed="true"] { background: var(--muted); border-color: var(--muted); color: var(--surface); }
+@media (max-width: 600px) {
+  .rrow { grid-template-columns: 1fr; }
+  .scale { grid-template-columns: repeat(5, 1fr) 0.8fr; }
+}
+.navbar { position: sticky; bottom: 0; z-index: 5; display: flex; gap: 10px; padding-block: 12px calc(12px + env(safe-area-inset-bottom, 0px)); background: linear-gradient(to top, var(--bg) 70%, transparent); }
+.navbar .btn { flex: 1; }
+.navbar .btn.primary { flex: 2; }
+
+/* Done */
+.done-mark { width: 64px; height: 64px; border-radius: 50%; background: var(--accent-soft); display: grid; place-items: center; color: var(--accent); }
+
+/* Report + results bars */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.kpi b { display: block; font-family: var(--f-display); font-size: 26px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 13px; color: var(--muted); }
+.cbars { display: flex; flex-direction: column; gap: 14px; }
+.cbar { display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr) 44px; gap: 10px; align-items: center; }
+.cbar .lbl { font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.cbar .val { text-align: right; font-family: var(--f-mono); font-size: 14px; font-weight: 600; }
+.track { position: relative; height: 14px; border-radius: 7px; background: var(--surface-2); }
+.track .fill { position: absolute; inset: 0 auto 0 0; border-radius: 7px; background: var(--accent); }
+.track .self { position: absolute; top: -4px; width: 4px; height: 22px; margin-left: -2px; border-radius: 2px; background: var(--gold); }
+.track .grp { position: absolute; top: -3px; width: 2px; height: 20px; margin-left: -1px; background: var(--muted); opacity: .7; }
+.key { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted); }
+.key i { display: inline-block; vertical-align: middle; margin-right: 6px; border-radius: 3px; }
+.key .k-o { width: 18px; height: 10px; background: var(--accent); }
+.key .k-s { width: 4px; height: 14px; background: var(--gold); }
+.key .k-g { width: 2px; height: 14px; background: var(--muted); }
+@media (max-width: 520px) { .cbar { grid-template-columns: minmax(0, 1fr) 44px; } .cbar .track { grid-column: 1 / -1; grid-row: 2; } }
+.ilist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.ilist li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 15px; }
+.ilist .v { font-family: var(--f-mono); font-size: 14px; white-space: nowrap; text-align: right; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 13px; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); }
+.chip.up { background: color-mix(in srgb, var(--good) 15%, var(--surface)); color: var(--good); }
+.chip.down { background: color-mix(in srgb, var(--bad) 13%, var(--surface)); color: var(--bad); }
+.chip.grow { background: var(--gold-soft); color: var(--gold); }
+.quote { border-left: 3px solid var(--accent); padding: 4px 0 4px 12px; font-size: 15px; }
+
+/* Admin */
+.tabs { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: var(--surface-2); overflow-x: auto; }
+.tabs button { flex: 1 1 auto; min-height: 42px; padding: 0 8px; font-size: 15px; border: 0; border-radius: 9px; background: transparent; font-weight: 600; color: var(--muted); white-space: nowrap; }
+.tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+.leader { background: var(--gold-soft); border-radius: var(--r); padding: 22px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: center; }
+.leader h2 { font-size: clamp(26px, 6vw, 38px); font-weight: 800; overflow-wrap: anywhere; }
+.leader .eyebrow { color: var(--gold); }
+.medal { width: 88px; height: 88px; border-radius: 50%; border: 3px solid var(--gold); display: grid; place-items: center; text-align: center; line-height: 1; }
+.medal b { font-family: var(--f-display); font-size: 30px; font-weight: 800; }
+.medal span { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
+.rank { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.rk { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.rk > button { width: 100%; text-align: left; background: none; border: 0; padding: 12px 14px; display: grid; grid-template-columns: 28px minmax(0, 1fr) 52px; gap: 6px 12px; align-items: center; }
+.rk .no { font-family: var(--f-mono); font-weight: 600; color: var(--muted); }
+.rk.first .no { color: var(--gold); }
+.rk .nm { font-weight: 600; overflow-wrap: anywhere; }
+.rk .ix { text-align: right; font-family: var(--f-display); font-weight: 800; font-size: 20px; font-variant-numeric: tabular-nums; }
+.rk .sub { grid-column: 2 / -1; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--muted); }
+.rk .ibar { grid-column: 2 / 3; height: 6px; border-radius: 3px; background: var(--surface-2); overflow: hidden; }
+.rk .ibar i { display: block; height: 100%; background: var(--accent); }
+.rk.first .ibar i { background: var(--gold); }
+.rk .detail { padding: 4px 14px 16px; display: flex; flex-direction: column; gap: 14px; border-top: 1px solid var(--line); }
+.tbox { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+table { border-collapse: collapse; font-size: 14px; }
+th, td { padding: 8px 10px; text-align: center; white-space: nowrap; }
+thead th { font-size: 12px; font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--line); }
+tbody th { text-align: left; font-weight: 600; position: sticky; left: 0; background: var(--surface); z-index: 1; max-width: 140px; white-space: normal; overflow-wrap: anywhere; }
+td.h { font-family: var(--f-mono); font-weight: 600; min-width: 52px; }
+td.diag { outline: 2px dashed var(--gold); outline-offset: -3px; }
+tbody tr + tr > * { border-top: 1px solid var(--line); }
+tbody th button { background: none; border: 0; padding: 0; font-weight: 600; color: var(--accent); text-decoration: underline; text-underline-offset: 3px; min-height: 32px; text-align: left; }
+.plist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.plist li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line); }
+@media (max-width: 520px) { .plist li { grid-template-columns: 1fr; } .plist li > .row { justify-content: flex-start !important; } .tabs button { font-size: 14px; } }
+.plist .code { font-family: var(--f-mono); font-weight: 600; font-size: 17px; letter-spacing: .12em; }
+.status { font-size: 13px; padding: 3px 9px; border-radius: 999px; background: var(--surface-2); color: var(--muted); }
+.status.ok { background: color-mix(in srgb, var(--good) 15%, var(--surface)); color: var(--good); }
+.status.mid { background: var(--gold-soft); color: var(--gold); }
+.switch { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 0; border-top: 1px solid var(--line); }
+.switch:first-child { border-top: 0; }
+.toggle { flex: none; width: 56px; height: 32px; border-radius: 16px; border: 0; background: var(--line); position: relative; }
+.toggle::after { content: ""; position: absolute; top: 4px; left: 4px; width: 24px; height: 24px; border-radius: 50%; background: var(--surface); transition: left .2s; }
+.toggle[aria-checked="true"] { background: var(--accent); }
+.toggle[aria-checked="true"]::after { left: 28px; }
+.confirm { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, var(--bad) 10%, var(--surface)); font-size: 14px; }
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 10px; font-size: 14px; z-index: 20; max-width: calc(100% - 32px); }
+.devbar { background: var(--gold-soft); color: var(--ink); font-size: 13px; padding: 8px 16px; text-align: center; }
+section h3 { font-size: 18px; font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div id="dev" class="devbar" hidden>Жергілікті тексеру режимі: деректер тек осы браузерде. Кодтар: TEST01…TEST12, тексеру құпиясөзі: local-test. Нағыз сайтта бұл жолақ көрінбейді.</div>
+<div class="wrap" id="app"></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(function () {
+'use strict';
+
+/* ---------- Сервермен байланыс ---------- */
+// Apps Script веб-қосымшасының сілтемесі (соңы /exec). Бет GitHub Pages-те тұрғанда сұраныстар осында барады.
+const API_URL = '';
+
+const IS_GAS = typeof google !== 'undefined' && google.script && google.script.run;
+const IS_LOCAL = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.protocol === 'file:';
+const USE_MOCK = !IS_GAS && !API_URL && IS_LOCAL;
+
+function call(action, params) {
+  const req = Object.assign({ action: action }, params || {});
+  if (USE_MOCK) return Mock.api(req);
+  if (!IS_GAS) {
+    if (!API_URL) return Promise.reject(new Error('Сайт әлі серверге қосылмаған. Оқытушыға хабарласыңыз.'));
+    return fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(req) })
+      .then(function (res) { return res.json(); }, function () { throw new Error('Байланыс үзілді. Интернетті тексеріп, қайталаңыз.'); })
+      .then(function (r) { if (r && r.ok) return r.data; throw new Error(r ? r.error : 'Серверден жауап келмеді.'); },
+        function (e) { throw e instanceof SyntaxError ? new Error('Сервер дұрыс жауап бермеді. Оқытушыға хабарласыңыз.') : e; });
+  }
+  return new Promise(function (resolve, reject) {
+    google.script.run
+      .withSuccessHandler(function (r) { r && r.ok ? resolve(r.data) : reject(new Error(r ? r.error : 'Серверден жауап келмеді.')); })
+      .withFailureHandler(function () { reject(new Error('Байланыс үзілді. Интернетті тексеріп, қайталаңыз.')); })
+      .api(req);
+  });
+}
+
+const box = function (kind) {
+  return {
+    get: function (k) { try { return window[kind].getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { v == null ? window[kind].removeItem(k) : window[kind].setItem(k, v); } catch (e) {} },
+  };
+};
+const local = box('localStorage');
+const sess = box('sessionStorage');
+
+/* ---------- Күй ---------- */
+const S = {
+  view: 'home', busy: false, err: '',
+  code: local.get('k360-code') || '',
+  person: null, people: [], config: null, open: true, reportsOpen: false,
+  draft: null, step: 0, missing: false, report: null,
+  pw: sess.get('k360-pw') || '', adm: null, tab: 'results', openRow: null, rater: null,
+  demo: false, confirm: null, rosterText: null, shareText: false,
+};
+const $app = document.getElementById('app');
+
+/* ---------- Көмекшілер ---------- */
+const esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+const fmt = function (x, d) { return x == null || isNaN(x) ? '—' : Number(x).toFixed(d == null ? 1 : d).replace('.', ','); };
+const mean = function (a) { return a.length ? a.reduce(function (s, x) { return s + x; }, 0) / a.length : null; };
+const pct = function (v) { return v == null ? 0 : Math.max(0, Math.min(100, (v - 1) / 4 * 100)); };
+const itemsOf = function (cfg) { const out = []; cfg.comps.forEach(function (c) { c.items.forEach(function (it) { out.push({ id: it.id, comp: c.id, compName: c.name, text: it.text }); }); }); return out; };
+function hashStr(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function orderFor(pid, people) {
+  const others = people.filter(function (p) { return p.id !== pid; });
+  const r = rng(hashStr(pid));
+  for (let i = others.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); const t = others[i]; others[i] = others[j]; others[j] = t; }
+  const me = people.find(function (p) { return p.id === pid; });
+  return me ? [me].concat(others) : others;
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.hidden = false;
+  clearTimeout(toast._t); toast._t = setTimeout(function () { t.hidden = true; }, 2600);
+}
+function go(view) { S.view = view; S.err = ''; render(); window.scrollTo(0, 0); }
+
+/* ---------- Негізгі сурет ---------- */
+const dial = function (size, p) {
+  const r = size / 2 - 4, c = 2 * Math.PI * r, ticks = [];
+  for (let i = 0; i < 12; i++) {
+    const a = i / 12 * 2 * Math.PI - Math.PI / 2;
+    ticks.push('<circle cx="' + (size / 2 + Math.cos(a) * (r - 7)).toFixed(1) + '" cy="' + (size / 2 + Math.sin(a) * (r - 7)).toFixed(1) + '" r="1.6" fill="currentColor" opacity=".55"/>');
+  }
+  return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '" aria-hidden="true" style="color:var(--accent)">' +
+    '<circle cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + r + '" fill="none" stroke="var(--line)" stroke-width="4"/>' +
+    '<circle cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + r + '" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + (c * (1 - p)).toFixed(1) + '" transform="rotate(-90 ' + size / 2 + ' ' + size / 2 + ')"/>' +
+    ticks.join('') + '</svg>';
+};
+
+function progress() {
+  if (!S.draft || !S.config) return 0;
+  const items = itemsOf(S.config), n = items.length * S.people.length;
+  let k = 0;
+  items.forEach(function (it) { const r = S.draft.ratings[it.id] || {}; S.people.forEach(function (p) { if (r[p.id] != null) k++; }); });
+  return n ? k / n : 0;
+}
+
+function topbar() {
+  let right = '';
+  if (S.person && ['intro', 'rate', 'final', 'done', 'report'].indexOf(S.view) >= 0) {
+    right = '<span class="who">' + esc(S.person.name) + '</span>' + dial(30, progress()) + '<button class="btn sm ghost" data-act="logout">Шығу</button>';
+  } else if (S.view === 'admin') {
+    right = '<span class="who">Әкімші</span><button class="btn sm ghost" data-act="logout">Шығу</button>';
+  }
+  return '<header class="top"><button class="brand link" style="text-decoration:none;color:var(--ink);padding:0" data-act="home">' + dial(26, 1) + 'Көшбасшы 360</button><div class="top-right">' + right + '</div></header>';
+}
+
+const errBox = function () { return S.err ? '<div class="note err" role="alert">' + esc(S.err) + '</div>' : ''; };
+
+/* ---------- Қатысушы беттері ---------- */
+const V = {};
+
+V.home = function () {
+  return '<section class="hero">' +
+    '<h1>Көшбасшы 360</h1>' +
+    '<p class="lede">Топтағы әр адам өзін және топтастарын бағалайды. Жиынтық бағалардан топтың көшбасшысы анықталады.</p>' +
+    '<form id="f-login" class="card login" autocomplete="off">' +
+      '<label for="code">Жеке кодыңыз</label>' +
+      '<input type="text" id="code" maxlength="12" spellcheck="false" autocapitalize="characters" placeholder="••••••" value="' + esc(S.code) + '">' +
+      '<button class="btn primary" type="submit"' + (S.busy ? ' disabled' : '') + '>' + (S.busy ? 'Тексерілуде…' : 'Кіру') + '</button>' +
+      errBox() +
+      '<p class="hint">Кодты оқытушыдан аласыз. Сол кодпен кез келген уақытта қайта кіріп, жалғастыра аласыз.</p>' +
+    '</form>' +
+    '<ul class="facts"><li>6 құзырет, 12 тұжырым</li><li>Шамамен 15 минут</li><li>Жауаптар автоматты сақталады</li></ul>' +
+    '<div><button class="link" data-act="adminLogin">Әкімші ретінде кіру</button></div>' +
+  '</section>';
+};
+
+function legend() {
+  return '<div class="legend">' + S.config.scale.map(function (s) { return '<span><b>' + s.v + '</b>' + esc(s.t) + '</span>'; }).join('') + '<span><b>?</b>Бағалай алмаймын</span></div>';
+}
+
+V.intro = function () {
+  const items = itemsOf(S.config);
+  const started = S.draft.step > 0;
+  return '<div class="stack">' +
+    '<h1 style="font-size:clamp(28px,6vw,38px)">Сәлем, ' + esc(S.person.name.split(' ')[0]) + '!</h1>' +
+    (!S.open ? '<div class="note warn">Тест қазір жабық. Жауаптарды сақтау мүмкін емес.</div>' : '') +
+    '<div class="card stack">' +
+      '<ol class="steps">' +
+        '<li>Әр экранда бір тұжырым және топтағы ' + S.people.length + ' адамның тізімі шығады. Тізімнің басында өзіңіз тұрасыз.</li>' +
+        '<li>Әр адамның сол әрекетті қаншалықты жиі жасайтынын бағалаңыз:</li>' +
+      '</ol>' + legend() +
+      '<ol class="steps" start="3">' +
+        '<li>Барлығы ' + items.length + ' тұжырым. Соңында топтың көшбасшысын таңдайсыз.</li>' +
+        '<li>Әр қадам сақталады. Үзіліс жасап, кейін сол кодпен кіріп жалғастыра аласыз.</li>' +
+      '</ol>' +
+    '</div>' +
+    '<div class="note"><b>Анонимдік.</b> Сіздің жауаптарыңызды тек оқытушы көреді. Топтастарыңыз өзіне қойылған бағалардың тек орташасын көреді, кім қандай баға қойғанын көрмейді.</div>' +
+    '<div class="row"><button class="btn primary" data-act="start"' + (!S.open ? ' disabled' : '') + '>' + (started ? 'Жалғастыру (' + Math.min(S.draft.step + 1, items.length) + '-сұрақтан)' : 'Бастау') + '</button></div>' +
+  '</div>';
+};
+
+V.rate = function () {
+  const items = itemsOf(S.config);
+  const it = items[S.step];
+  const compIdx = S.config.comps.findIndex(function (c) { return c.id === it.comp; });
+  const r = S.draft.ratings[it.id] || {};
+  const rows = orderFor(S.person.id, S.people).map(function (p) {
+    const self = p.id === S.person.id;
+    const v = r[p.id];
+    const btns = [1, 2, 3, 4, 5, 0].map(function (n) {
+      return '<button type="button" class="sc' + (n === 0 ? ' na' : '') + '" data-act="rate" data-t="' + esc(p.id) + '" data-v="' + n + '" aria-pressed="' + (v === n) + '" aria-label="' + esc(p.name) + ': ' + (n === 0 ? 'бағалай алмаймын' : n) + '">' + (n === 0 ? '?' : n) + '</button>';
+    }).join('');
+    return '<li class="rrow' + (self ? ' self' : '') + (S.missing && v == null ? ' missing' : '') + '" data-row="' + esc(p.id) + '">' +
+      '<span class="rname">' + esc(p.name) + (self ? '<span class="tag">өзіңіз</span>' : '') + '</span>' +
+      '<div class="scale" role="group" aria-label="' + esc(p.name) + '">' + (self ? btns.replace(/<button[^>]*data-v="0"[^>]*>\?<\/button>/, '<span></span>') : btns) + '</div></li>';
+  }).join('');
+  return '<div class="rate-head">' +
+      '<div class="meta"><span>' + (compIdx + 1) + '/' + S.config.comps.length + ' · ' + esc(it.compName) + '</span><span class="num">Сұрақ ' + (S.step + 1) + ' / ' + items.length + '</span></div>' +
+      '<div class="bar"><i style="width:' + ((S.step) / items.length * 100).toFixed(1) + '%"></i></div>' +
+      '<h2 class="stmt"><small>Бұл адам…</small>' + esc(it.text) + '</h2>' +
+      '<div class="small muted">1 — ешқашан · 2 — сирек · 3 — кейде · 4 — жиі · 5 — әрқашан · ? — білмеймін</div>' +
+    '</div>' +
+    '<ol class="rows" style="margin-top:14px">' + rows + '</ol>' +
+    errBox() +
+    '<div class="navbar"><button class="btn" data-act="prev">Артқа</button><button class="btn primary" data-act="next"' + (S.busy ? ' disabled' : '') + '>' + (S.busy ? 'Сақталуда…' : 'Келесі') + '</button></div>';
+};
+
+V.final = function () {
+  const others = S.people.filter(function (p) { return p.id !== S.person.id; });
+  const opts = function (sel, skip) {
+    return '<option value="">— таңдаңыз —</option>' + others.filter(function (p) { return p.id !== skip; }).map(function (p) {
+      return '<option value="' + esc(p.id) + '"' + (sel === p.id ? ' selected' : '') + '>' + esc(p.name) + '</option>';
+    }).join('');
+  };
+  const d = S.draft;
+  return '<div class="stack" style="padding-top:8px">' +
+    '<div class="bar"><i style="width:100%"></i></div>' +
+    '<h2 style="font-size:clamp(24px,5.5vw,32px)">Топтың көшбасшысы кім?</h2>' +
+    '<p class="muted">Өзіңізден басқа бір топтасыңызды таңдаңыз. Қаласаңыз, екінші адамды да қосыңыз.</p>' +
+    '<div class="card stack">' +
+      '<div class="field"><label for="nom1">1-таңдау</label><select id="nom1">' + opts(d.nom[0], d.nom[1]) + '</select></div>' +
+      '<div class="field"><label for="nom2">2-таңдау <span class="muted small">(міндетті емес)</span></label><select id="nom2">' + opts(d.nom[1], d.nom[0]) + '</select></div>' +
+      '<div class="field"><label for="why">Неге оны көшбасшы деп санайсыз? <span class="muted small">(міндетті емес)</span></label><textarea id="why" maxlength="1000">' + esc(d.why) + '</textarea><span class="hint">1-таңдаған адамыңыз бұл пікірді атыңызсыз көреді.</span></div>' +
+      '<div class="field"><label for="general">Топ немесе тест туралы пікіріңіз <span class="muted small">(міндетті емес)</span></label><textarea id="general" maxlength="1000">' + esc(d.general) + '</textarea><span class="hint">Мұны тек оқытушы көреді.</span></div>' +
+    '</div>' +
+    errBox() +
+    '<div class="navbar"><button class="btn" data-act="prev">Артқа</button><button class="btn primary" data-act="submit"' + (S.busy ? ' disabled' : '') + '>' + (S.busy ? 'Жіберілуде…' : (d.submitted ? 'Өзгерістерді сақтау' : 'Аяқтау және жіберу')) + '</button></div>' +
+  '</div>';
+};
+
+V.done = function () {
+  return '<div class="stack" style="padding-top:20px;align-items:flex-start">' +
+    '<div class="done-mark"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>' +
+    '<h2 style="font-size:clamp(26px,6vw,34px)">Рахмет, ' + esc(S.person.name.split(' ')[0]) + '!</h2>' +
+    '<p>Жауаптарыңыз сақталды.</p>' +
+    (S.reportsOpen
+      ? '<button class="btn primary" data-act="report">Маған қойылған бағаны көру</button>'
+      : '<div class="note">Оқытушы нәтижелерді ашқан соң, осы кодпен қайта кіріп, өзіңізге қойылған бағаларды (анонимді, орташа мәнмен) көре аласыз.</div>') +
+    errBox() +
+    '<div class="row">' + (S.open ? '<button class="btn" data-act="edit">Жауаптарды өзгерту</button>' : '') + '<button class="btn ghost" data-act="logout">Шығу</button></div>' +
+  '</div>';
+};
+
+function compBars(rows, opts) {
+  return '<div class="cbars">' + rows.map(function (c) {
+    return '<div class="cbar"><span class="lbl">' + esc(c.name) + '</span>' +
+      '<div class="track">' + (c.others != null ? '<div class="fill" style="width:' + pct(c.others).toFixed(1) + '%"></div>' : '') +
+        (opts.group && c.group != null ? '<div class="grp" style="left:' + pct(c.group).toFixed(1) + '%" title="Топ орташасы"></div>' : '') +
+        (c.self != null ? '<div class="self" style="left:' + pct(c.self).toFixed(1) + '%" title="Өзін бағалауы"></div>' : '') +
+      '</div><span class="val">' + fmt(c.others, 1) + '</span></div>';
+  }).join('') + '</div>' +
+  '<div class="key"><span><i class="k-o"></i>Топтастар бағасы (1–5)</span><span><i class="k-s"></i>Өзін-өзі бағалау</span>' + (opts.group ? '<span><i class="k-g"></i>Топ орташасы</span>' : '') + '</div>';
+}
+
+V.report = function () {
+  const R = S.report;
+  if (!R) return '<p class="muted">Жүктелуде…</p>';
+  if (!R.show) {
+    return '<div class="stack" style="padding-top:8px"><h2>Сіздің нәтижеңіз</h2>' +
+      '<div class="note warn">Сізді әзірге ' + R.raters + ' адам бағалады. Анонимдікті сақтау үшін нәтиже кемінде ' + R.minRaters + ' адам бағалағанда ғана көрсетіледі.</div>' +
+      '<div><button class="btn" data-act="back-done">Артқа</button></div></div>';
+  }
+  const ranked = R.comps.filter(function (c) { return c.others != null; }).slice().sort(function (a, b) { return b.others - a.others; });
+  const strong = ranked.slice(0, 2), grow = ranked.slice(-2).reverse();
+  const blind = R.comps.filter(function (c) { return c.self != null && c.others != null && c.self - c.others >= 0.6; });
+  const hidden = R.comps.filter(function (c) { return c.self != null && c.others != null && c.others - c.self >= 0.6; });
+  const items = R.items.map(function (it) {
+    return '<li><span>' + esc(it.text) + '</span><span class="v">' + fmt(it.others, 1) + (it.self != null ? ' <span class="muted">/ өзі ' + (it.self || '?') + '</span>' : '') + '</span></li>';
+  }).join('');
+  return '<div class="stack" style="padding-top:4px">' +
+    '<div><div class="eyebrow">Жеке 360° есеп</div><h2 style="font-size:clamp(26px,6vw,34px);margin-top:4px">' + esc(R.name) + '</h2></div>' +
+    '<div class="kpis">' +
+      '<div class="kpi"><b>' + fmt(R.others, 2) + '</b><span>топтастар бағасы (5-тен)</span></div>' +
+      '<div class="kpi"><b>' + fmt(R.self, 2) + '</b><span>өзіңізге қойған баға</span></div>' +
+      '<div class="kpi"><b>' + fmt(R.group, 2) + '</b><span>топтың орташа бағасы</span></div>' +
+      '<div class="kpi"><b>' + (R.nom1 + R.nom2) + '</b><span>адам сізді көшбасшы ретінде ұсынды' + (R.nom1 ? ' (' + R.nom1 + ' — бірінші таңдау)' : '') + '</span></div>' +
+    '</div>' +
+    '<p class="small muted">Сізді ' + R.raters + ' топтасыңыз бағалады. Бағалар тек орташа мәнмен көрсетіледі.</p>' +
+    '<section class="card stack"><h3>Құзыреттер бойынша</h3>' + compBars(R.comps, { group: true }) + '</section>' +
+    '<section class="card stack"><h3>Қорытынды</h3>' +
+      '<div class="field"><span class="small muted">Күшті жақтарыңыз</span><div class="chips">' + strong.map(function (c) { return '<span class="chip up">' + esc(c.name) + ' · ' + fmt(c.others) + '</span>'; }).join('') + '</div></div>' +
+      '<div class="field"><span class="small muted">Дамытуға болатын жақтар</span><div class="chips">' + grow.map(function (c) { return '<span class="chip grow">' + esc(c.name) + ' · ' + fmt(c.others) + '</span>'; }).join('') + '</div></div>' +
+      (blind.length ? '<p class="small">Мына құзыреттерде өзіңізді топтастарыңызға қарағанда жоғары бағалағансыз: <b>' + blind.map(function (c) { return esc(c.name); }).join(', ') + '</b>. Бұл «соқыр аймақ» болуы мүмкін.</p>' : '') +
+      (hidden.length ? '<p class="small">Мына құзыреттерде топтастарыңыз сізді өзіңізден жоғары бағалайды: <b>' + hidden.map(function (c) { return esc(c.name); }).join(', ') + '</b>. Бұл сіз байқамаған күшті жағыңыз.</p>' : '') +
+    '</section>' +
+    (R.why.length ? '<section class="card stack"><h3>Сізді таңдағандардың пікірі</h3>' + R.why.map(function (w) { return '<p class="quote">' + esc(w) + '</p>'; }).join('') + '</section>' : '') +
+    '<section class="card stack"><h3>Әр тұжырым бойынша</h3><ul class="ilist">' + items + '</ul></section>' +
+    '<div><button class="btn" data-act="back-done">Артқа</button></div>' +
+  '</div>';
+};
+
+/* ---------- Әкімші беттері ---------- */
+
+V.adminLogin = function () {
+  return '<div class="stack" style="padding-top:8px">' +
+    '<h2 style="font-size:28px">Әкімші кіруі</h2>' +
+    '<form id="f-admin" class="card login">' +
+      '<label for="pw">Құпиясөз</label>' +
+      '<input type="password" id="pw" autocomplete="current-password" style="letter-spacing:.05em;text-transform:none;font-family:var(--f-body)">' +
+      '<button class="btn primary" type="submit"' + (S.busy ? ' disabled' : '') + '>' + (S.busy ? 'Тексерілуде…' : 'Кіру') + '</button>' + errBox() +
+    '</form>' +
+    '<div><button class="link" data-act="home">Қатысушы ретінде кіру</button></div>' +
+  '</div>';
+};
+
+function compute(people, answers, config) {
+  const items = itemsOf(config), comps = config.comps;
+  const ids = {}; people.forEach(function (p) { ids[p.id] = true; });
+  const subs = answers.filter(function (a) { return a.submitted && ids[a.id]; });
+  const val = function (a, it, t) { const r = a.data.ratings && a.data.ratings[it.id]; const v = r && r[t]; return v >= 1 && v <= 5 ? v : null; };
+  const rows = people.map(function (p) {
+    const o = [], s = [], oc = {}, sc = {}, raters = {};
+    comps.forEach(function (c) { oc[c.id] = []; sc[c.id] = []; });
+    subs.forEach(function (a) {
+      items.forEach(function (it) {
+        const v = val(a, it, p.id); if (v == null) return;
+        if (a.id === p.id) { s.push(v); sc[it.comp].push(v); } else { o.push(v); oc[it.comp].push(v); raters[a.id] = true; }
+      });
+    });
+    const nom = function (k) { return subs.filter(function (a) { return a.id !== p.id && a.data.nom && a.data.nom[k] === p.id; }).length; };
+    const n1 = nom(0), n2 = nom(1);
+    return {
+      id: p.id, name: p.name, others: mean(o), self: mean(s), raters: Object.keys(raters).length, nom1: n1, nom2: n2, nomPts: 2 * n1 + n2,
+      comps: comps.map(function (c) { return { id: c.id, name: c.name, others: mean(oc[c.id]), self: mean(sc[c.id]) }; }),
+    };
+  });
+  const maxNom = Math.max.apply(null, [0].concat(rows.map(function (r) { return r.nomPts; })));
+  rows.forEach(function (r) {
+    r.ratingPct = r.others == null ? null : pct(r.others);
+    r.nomPct = maxNom ? r.nomPts / maxNom * 100 : 0;
+    r.index = r.ratingPct == null ? null : (maxNom ? 0.7 * r.ratingPct + 0.3 * r.nomPct : r.ratingPct);
+    r.gap = r.self != null && r.others != null ? r.self - r.others : null;
+  });
+  const ranked = rows.filter(function (r) { return r.index != null; }).sort(function (a, b) { return b.index - a.index || b.others - a.others; });
+  ranked.forEach(function (r, i) { r.rank = i + 1; });
+  return { ranked: ranked, unrated: rows.filter(function (r) { return r.index == null; }), subs: subs, maxNom: maxNom, val: val, items: items, comps: comps };
+}
+
+function adminSource() {
+  if (S.demo) return S.demoData || (S.demoData = makeDemo(S.adm.config));
+  return { people: S.adm.people, answers: S.adm.answers };
+}
+
+function gapChip(g) {
+  if (g == null) return '';
+  if (g >= 0.6) return '<span class="chip down">өзін жоғары бағалайды +' + fmt(g) + '</span>';
+  if (g <= -0.6) return '<span class="chip up">өзін төмен бағалайды ' + fmt(g) + '</span>';
+  return '<span class="chip">өзін дәл бағалайды</span>';
+}
+
+function tabResults() {
+  const src = adminSource();
+  const C = compute(src.people, src.answers, S.adm.config);
+  const total = src.people.length;
+  const head = S.demo
+    ? '<div class="note warn row" style="justify-content:space-between"><span><b>Мысал деректер.</b> Бұл ойдан шығарылған 12 қатысушы, нақты нәтиже емес.</span><button class="btn sm" data-act="demo-off">Мысалды жабу</button></div>'
+    : '';
+  if (C.subs.length < 3) {
+    return head + '<div class="card stack"><h3>Нәтиже әлі дайын емес</h3><p class="muted">Тестті ' + C.subs.length + ' / ' + total + ' адам аяқтады. Рейтинг кемінде 3 адам аяқтағанда шығады.</p>' +
+      '<div class="row"><button class="btn" data-act="demo-on">Мысал нәтижені көру</button><button class="btn ghost" data-act="refresh">Жаңарту</button></div></div>';
+  }
+  const L = C.ranked[0], R2 = C.ranked[1];
+  const close = R2 && L.index - R2.index < 3;
+  const leader = '<div class="leader"><div class="stack" style="gap:8px;min-width:0">' +
+      '<span class="eyebrow">Топтың көшбасшысы</span><h2>' + esc(L.name) + '</h2>' +
+      '<div class="small">Топтастар бағасы <b class="num">' + fmt(L.others, 2) + '</b> / 5 · көшбасшы ретінде <b>' + L.nom1 + '</b> адам бірінші, <b>' + L.nom2 + '</b> адам екінші таңдады</div>' +
+      (R2 ? '<div class="small muted">2-орын: ' + esc(R2.name) + ' (' + fmt(R2.index, 0) + ')' + (close ? '. Айырма өте аз, екеуі де көшбасшылық танытады.' : '') + '</div>' : '') +
+    '</div><div class="medal"><div><b class="num">' + fmt(L.index, 0) + '</b><span>индекс</span></div></div></div>';
+  const ip = C.ranked.length ? C.ranked[0].index : 100;
+  const list = C.ranked.map(function (r) {
+    const open = S.openRow === r.id;
+    return '<li class="rk' + (r.rank === 1 ? ' first' : '') + '"><button data-act="row" data-id="' + esc(r.id) + '" aria-expanded="' + open + '">' +
+      '<span class="no">' + r.rank + '</span><span class="nm">' + esc(r.name) + '</span><span class="ix">' + fmt(r.index, 0) + '</span>' +
+      '<span class="ibar"><i style="width:' + (r.index / Math.max(ip, 1) * 100).toFixed(1) + '%"></i></span>' +
+      '<span class="sub"><span>бағасы ' + fmt(r.others, 2) + '</span><span>ұсыныс ' + r.nom1 + ' + ' + r.nom2 + '</span><span>өзі ' + fmt(r.self, 2) + '</span><span>' + r.raters + ' бағалаушы</span></span>' +
+      '</button>' + (open ? detail(r, C) : '') + '</li>';
+  }).join('');
+  const unrated = C.unrated.length ? '<p class="small muted">Әлі ешкім бағаламаған: ' + C.unrated.map(function (r) { return esc(r.name); }).join(', ') + '</p>' : '';
+  const heat = '<div class="tbox"><table><thead><tr><th></th>' + C.comps.map(function (c) { return '<th>' + esc(c.name) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+    C.ranked.map(function (r) { return '<tr><th>' + esc(r.name) + '</th>' + r.comps.map(function (c) { return heatCell(c.others); }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
+  const whyBy = {}; C.subs.forEach(function (a) { if (a.data.why && a.data.nom && a.data.nom[0]) (whyBy[a.data.nom[0]] = whyBy[a.data.nom[0]] || []).push(a.data.why); });
+  const names = {}; src.people.forEach(function (p) { names[p.id] = p.name; });
+  const whys = Object.keys(whyBy).map(function (id) { return '<div class="stack" style="gap:6px"><b>' + esc(names[id] || '?') + '</b>' + whyBy[id].map(function (w) { return '<p class="quote">' + esc(w) + '</p>'; }).join('') + '</div>'; }).join('');
+  const gens = C.subs.filter(function (a) { return a.data.general; }).map(function (a) { return '<p class="quote">' + esc(a.data.general) + '</p>'; }).join('');
+  return head +
+    '<p class="small muted">Тестті аяқтағандар: <b>' + C.subs.length + ' / ' + total + '</b>' + (C.subs.length < total ? '. Нәтиже алдын ала, бәрі аяқтағанда өзгеруі мүмкін.' : '') + '</p>' +
+    leader +
+    '<section class="stack"><h3>Рейтинг</h3><p class="small muted">Атын бассаңыз, толық мәлімет ашылады.</p><ol class="rank">' + list + '</ol>' + unrated + '</section>' +
+    '<section class="stack"><h3>Құзыреттер картасы</h3><p class="small muted">Топтастардың орташа бағасы (1–5). Түсі неғұрлым қанық болса, баға соғұрлым жоғары.</p>' + heat + '</section>' +
+    (whys ? '<section class="card stack"><h3>«Неге көшбасшы?» пікірлері</h3>' + whys + '</section>' : '') +
+    (gens ? '<section class="card stack"><h3>Жалпы пікірлер</h3>' + gens + '</section>' : '') +
+    '<section class="card stack"><h3>Индекс қалай есептеледі</h3>' +
+      '<p class="small">Көшбасшы индексі (0–100) = 70% × топтастар бағасы + 30% × көшбасшылыққа ұсыныс.</p>' +
+      '<p class="small muted">Топтастар бағасы — 12 тұжырым бойынша басқалардың қойған орташа баллы (1 → 0, 5 → 100). Өзін-өзі бағалау индекске кірмейді. Ұсыныс: бірінші таңдау 2 ұпай, екінші таңдау 1 ұпай; ең көп ұпай жинаған адам 100 алады. «?» жауаптары есепке алынбайды.</p>' +
+    '</section>' +
+    (S.demo ? '' : '<section class="card stack"><h3>Экспорт</h3><div class="row"><button class="btn" data-act="export-sheet"' + (S.busy ? ' disabled' : '') + '>Google кестеге жазу</button><button class="btn" data-act="csv">CSV жүктеу</button></div><p class="hint">«Google кестеге жазу» кестеңізге «Нәтиже» және «Матрица» парақтарын қосады. Оны Файл → Жүктеу → Microsoft Excel арқылы .xlsx етіп сақтай аласыз.</p></section>');
+}
+
+function heatCell(v, extra) {
+  if (v == null) return '<td class="h muted' + (extra || '') + '">—</td>';
+  const p = Math.round(12 + pct(v) * 0.78);
+  return '<td class="h' + (extra || '') + '" style="background:color-mix(in srgb, var(--accent) ' + p + '%, var(--surface));color:' + (p > 55 ? 'var(--on-accent)' : 'var(--ink)') + '">' + fmt(v, 1) + '</td>';
+}
+
+function detail(r, C) {
+  const byRater = C.subs.filter(function (a) { return a.id !== r.id; }).map(function (a) {
+    const vs = []; C.items.forEach(function (it) { const v = C.val(a, it, r.id); if (v != null) vs.push(v); });
+    return { name: a.name || nameOf(a.id), v: mean(vs) };
+  }).sort(function (a, b) { return (b.v || 0) - (a.v || 0); });
+  return '<div class="detail"><div class="chips">' + gapChip(r.gap) + '</div>' + compBars(r.comps, { group: false }) +
+    '<div class="field"><span class="small muted">Әр бағалаушының осы адамға қойған орташа баллы</span><div class="chips">' +
+    byRater.map(function (b) { return '<span class="chip">' + esc(b.name) + ' · ' + fmt(b.v) + '</span>'; }).join('') + '</div></div></div>';
+}
+
+function nameOf(id) {
+  const src = adminSource();
+  const p = src.people.find(function (x) { return x.id === id; });
+  return p ? p.name : id;
+}
+
+function tabMatrix() {
+  const src = adminSource();
+  const C = compute(src.people, src.answers, S.adm.config);
+  const raters = src.answers.filter(function (a) { return src.people.some(function (p) { return p.id === a.id; }); });
+  if (!raters.length) return '<div class="card"><p class="muted">Әзірге ешкім жауап бермеді.</p><div class="row" style="margin-top:12px"><button class="btn" data-act="demo-on">Мысалмен көру</button></div></div>';
+  const short = function (n) { const w = String(n).split(' '); return w[0].length > 10 ? w[0].slice(0, 9) + '…' : w[0]; };
+  const head = '<tr><th class="small">Кім ↓ кімді →</th>' + src.people.map(function (p) { return '<th title="' + esc(p.name) + '">' + esc(short(p.name)) + '</th>'; }).join('') + '<th>Орташа берген</th><th>1-таңдау</th><th>2-таңдау</th></tr>';
+  const body = raters.map(function (a) {
+    const given = [];
+    const cells = src.people.map(function (p) {
+      const vs = []; C.items.forEach(function (it) { const v = C.val(a, it, p.id); if (v != null) vs.push(v); });
+      const m = mean(vs); if (p.id !== a.id) given.push.apply(given, vs);
+      return heatCell(m, p.id === a.id ? ' diag' : '');
+    }).join('');
+    const nm = a.name || nameOf(a.id);
+    return '<tr><th><button data-act="rater" data-id="' + esc(a.id) + '">' + esc(nm) + '</button>' + (a.submitted ? '' : ' <span class="status mid">' + (a.step || 0) + '-қадам</span>') + '</th>' + cells +
+      '<td class="h">' + fmt(mean(given), 2) + '</td><td>' + esc(a.data.nom && a.data.nom[0] ? short(nameOf(a.data.nom[0])) : '—') + '</td><td>' + esc(a.data.nom && a.data.nom[1] ? short(nameOf(a.data.nom[1])) : '—') + '</td></tr>';
+  }).join('');
+  let det = '';
+  const ra = S.rater && raters.find(function (a) { return a.id === S.rater; });
+  if (ra) {
+    const per = src.people.map(function (p) {
+      return '<tr><th>' + esc(p.name) + (p.id === ra.id ? ' <span class="tag">өзі</span>' : '') + '</th>' + C.comps.map(function (c) {
+        const vs = []; C.items.filter(function (it) { return it.comp === c.id; }).forEach(function (it) { const v = C.val(ra, it, p.id); if (v != null) vs.push(v); });
+        return heatCell(mean(vs));
+      }).join('') + '</tr>';
+    }).join('');
+    det = '<section class="card stack"><div class="row" style="justify-content:space-between"><h3>' + esc(ra.name || nameOf(ra.id)) + ' қалай бағалады</h3><button class="btn sm ghost" data-act="rater" data-id="">Жабу</button></div>' +
+      '<div class="tbox"><table><thead><tr><th></th>' + C.comps.map(function (c) { return '<th>' + esc(c.name) + '</th>'; }).join('') + '</tr></thead><tbody>' + per + '</tbody></table></div>' +
+      (ra.data.why ? '<div class="field"><span class="small muted">Көшбасшыны неге таңдады</span><p class="quote">' + esc(ra.data.why) + '</p></div>' : '') +
+      (ra.data.general ? '<div class="field"><span class="small muted">Жалпы пікірі</span><p class="quote">' + esc(ra.data.general) + '</p></div>' : '') +
+    '</section>';
+  }
+  return (S.demo ? '<div class="note warn row" style="justify-content:space-between"><span><b>Мысал деректер.</b></span><button class="btn sm" data-act="demo-off">Мысалды жабу</button></div>' : '') +
+    '<p class="small muted">Әр жол — бір бағалаушы, әр баған — бағаланған адам. Ұяшықта 12 тұжырым бойынша орташа балл тұр. Сары жиекті ұяшық — адамның өзін бағалауы. Бағалаушының атын бассаңыз, құзырет бойынша толық бағалары ашылады.</p>' +
+    det + '<div class="tbox"><table><thead>' + head + '</thead><tbody>' + body + '</tbody></table></div>';
+}
+
+function tabPeople() {
+  const A = S.adm;
+  const n = itemsOf(A.config).length;
+  const ans = {}; A.answers.forEach(function (a) { ans[a.id] = a; });
+  const status = function (p) {
+    const a = ans[p.id];
+    if (!a) return '<span class="status">кірмеген</span>';
+    if (a.submitted) return '<span class="status ok">аяқтады</span>';
+    return '<span class="status mid">' + Math.min(a.step, n) + ' / ' + n + '</span>';
+  };
+  const done = A.answers.filter(function (a) { return a.submitted; }).length;
+  const conf = function (id) {
+    return S.confirm && S.confirm.id === id ? '<div class="confirm" style="grid-column:1/-1"><span>' + esc(S.confirm.text) + '</span><button class="btn sm danger" data-act="confirm-yes">Иә, өшіру</button><button class="btn sm" data-act="confirm-no">Болдырмау</button></div>' : '';
+  };
+  const list = A.people.map(function (p) {
+    return '<li><div style="min-width:0"><div style="font-weight:600;overflow-wrap:anywhere">' + esc(p.name) + '</div><div class="code">' + esc(p.code) + '</div></div>' +
+      '<div class="row" style="justify-content:flex-end">' + status(p) + (ans[p.id] ? '<button class="btn sm ghost danger" data-act="reset" data-id="' + esc(p.id) + '">Жауабын өшіру</button>' : '') + '</div>' + conf(p.id) + '</li>';
+  }).join('');
+  const roster = S.rosterText != null ? S.rosterText : A.people.map(function (p) { return p.name; }).join('\n');
+  const share = 'Көшбасшы 360 тесті\nСілтеме: ' + (IS_GAS ? A.appUrl : location.origin + location.pathname) + '\n\n' + A.people.map(function (p) { return p.name + ' — ' + p.code; }).join('\n');
+  return '<section class="card"><div class="switch"><div><b>Тест ашық</b><div class="hint">Өшірсеңіз, ешкім жауап жібере алмайды.</div></div><button class="toggle" role="switch" aria-checked="' + A.open + '" aria-label="Тест ашық" data-act="toggle" data-k="open"></button></div>' +
+      '<div class="switch"><div><b>Жеке нәтижелер ашық</b><div class="hint">Қосылса, әр қатысушы өзіне қойылған бағаның орташасын көреді. Бәрі аяқтаған соң қосыңыз.</div></div><button class="toggle" role="switch" aria-checked="' + A.reportsOpen + '" aria-label="Жеке нәтижелер ашық" data-act="toggle" data-k="reportsOpen"></button></div></section>' +
+    '<section class="stack"><div class="row" style="justify-content:space-between"><h3>Қатысушылар · ' + done + ' / ' + A.people.length + ' аяқтады</h3><button class="btn sm" data-act="refresh">Жаңарту</button></div>' +
+      (A.people.length ? '<ul class="plist">' + list + '</ul>' : '<div class="note">Тізім бос. Төменге қатысушылардың есімін енгізіңіз: әр жолға бір адам.</div>') + '</section>' +
+    (A.people.length ? '<section class="card stack"><h3>Кодтарды тарату</h3><p class="small muted">Әр адамға тек өз кодын жіберіңіз. Төмендегі мәтінде барлық код бар, оны тек өзіңізде сақтаңыз.</p>' +
+      '<div class="row"><button class="btn" data-act="copy-share">Мәтінді көшіру</button>' + (A.sheetUrl ? '<a class="btn ghost" href="' + esc(A.sheetUrl) + '" target="_blank" rel="noopener">Google кестені ашу</a>' : '') + '</div>' +
+      '<textarea id="share" readonly rows="6">' + esc(share) + '</textarea></section>' : '') +
+    '<section class="card stack"><h3>Қатысушылар тізімі</h3>' +
+      '<div class="field"><label for="roster">Әр жолға бір адамның аты-жөні</label><textarea id="roster" rows="12" placeholder="Айгерім Нұрланқызы&#10;Бекзат Серікұлы&#10;…">' + esc(roster) + '</textarea>' +
+      '<span class="hint">Жаңа есімге код автоматты жасалады. Бар есімнің коды өзгермейді. Тізімнен өшірілген адамның коды жойылады.</span></div>' +
+      '<div class="row"><button class="btn primary" data-act="save-roster"' + (S.busy ? ' disabled' : '') + '>' + (S.busy ? 'Сақталуда…' : 'Тізімді сақтау') + '</button></div></section>';
+}
+
+V.admin = function () {
+  const tabs = [['results', 'Нәтиже'], ['matrix', 'Кім кімге'], ['people', 'Қатысушылар']];
+  const body = S.tab === 'results' ? tabResults() : S.tab === 'matrix' ? tabMatrix() : tabPeople();
+  return '<div class="stack">' +
+    '<div class="tabs" role="tablist">' + tabs.map(function (t) { return '<button role="tab" aria-selected="' + (S.tab === t[0]) + '" data-act="tab" data-k="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>' +
+    errBox() + body + '</div>';
+};
+
+/* ---------- Сурет салу ---------- */
+function render() {
+  const a = document.activeElement, fid = a && a.id;
+  let sel = null;
+  if (fid && a.setSelectionRange) { try { sel = [a.selectionStart, a.selectionEnd]; } catch (e) {} }
+  $app.innerHTML = topbar() + (V[S.view] || V.home)();
+  if (fid) {
+    const el = document.getElementById(fid);
+    if (el && el !== document.activeElement) { try { el.focus({ preventScroll: true }); if (sel) el.setSelectionRange(sel[0], sel[1]); } catch (e) {} }
+  }
+}
+
+/* ---------- Әрекеттер ---------- */
+function freshDraft() { return { ratings: {}, nom: [], why: '', general: '', step: 0, submitted: false }; }
+
+async function doLogin() {
+  const code = (document.getElementById('code').value || '').replace(/\s+/g, '').toUpperCase();
+  if (!code) { S.err = 'Кодты енгізіңіз.'; render(); return; }
+  S.busy = true; S.err = ''; S.code = code; render();
+  try {
+    const d = await call('login', { code: code });
+    local.set('k360-code', code);
+    Object.assign(S, { person: d.person, people: d.people, config: d.config, open: d.open, reportsOpen: d.reportsOpen });
+    S.draft = d.answer ? Object.assign(freshDraft(), JSON.parse(JSON.stringify(d.answer))) : freshDraft();
+    if (!Array.isArray(S.draft.nom)) S.draft.nom = [];
+    S.busy = false;
+    go(S.draft.submitted ? 'done' : 'intro');
+  } catch (e) { S.busy = false; S.err = e.message; render(); }
+}
+
+async function save() {
+  S.busy = true; S.err = ''; render();
+  try { await call('save', { code: S.code, data: S.draft }); S.busy = false; return true; }
+  catch (e) { S.busy = false; S.err = e.message; render(); return false; }
+}
+
+async function doAdmin(pw) {
+  S.busy = true; S.err = ''; render();
+  try {
+    S.adm = await call('admin', { pw: pw });
+    S.pw = pw; sess.set('k360-pw', pw);
+    S.busy = false; S.rosterText = null;
+    if (!S.adm.people.length) S.tab = 'people';
+    go('admin');
+  } catch (e) { S.busy = false; S.err = e.message; if (S.view !== 'adminLogin') S.view = 'adminLogin'; render(); }
+}
+
+async function adminCall(action, params, okMsg) {
+  S.busy = true; S.err = ''; render();
+  try { S.adm = await call(action, Object.assign({ pw: S.pw }, params || {})); S.busy = false; render(); if (okMsg) toast(okMsg); return true; }
+  catch (e) { S.busy = false; S.err = e.message; render(); return false; }
+}
+
+function resultTables() {
+  const C = compute(S.adm.people, S.adm.answers, S.adm.config);
+  const n = function (x, d) { return x == null ? '' : Math.round(x * Math.pow(10, d)) / Math.pow(10, d); };
+  const res = [['Орын', 'Аты-жөні', 'Индекс (0–100)', 'Топтастар бағасы (1–5)', 'Өзін бағалауы', 'Айырма (өзі − топтастар)', '1-таңдау', '2-таңдау', 'Бағалаушылар саны']
+    .concat(C.comps.map(function (c) { return c.name; }))];
+  C.ranked.forEach(function (r) {
+    res.push([r.rank, r.name, n(r.index, 1), n(r.others, 2), n(r.self, 2), n(r.gap, 2), r.nom1, r.nom2, r.raters].concat(r.comps.map(function (c) { return n(c.others, 2); })));
+  });
+  const ppl = S.adm.people;
+  const mx = [['Бағалаушы \\ Бағаланушы'].concat(ppl.map(function (p) { return p.name; }))];
+  S.adm.answers.filter(function (a) { return ppl.some(function (p) { return p.id === a.id; }); }).forEach(function (a) {
+    mx.push([a.name || nameOf(a.id)].concat(ppl.map(function (p) {
+      const vs = []; C.items.forEach(function (it) { const v = C.val(a, it, p.id); if (v != null) vs.push(v); });
+      return n(mean(vs), 2);
+    })));
+  });
+  return [{ name: 'Нәтиже', rows: res }, { name: 'Матрица', rows: mx }];
+}
+
+function downloadCsv() {
+  const t = resultTables()[0].rows;
+  const csv = '﻿' + t.map(function (r) { return r.map(function (c) { const s = String(c == null ? '' : c); return /[",;\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }).join(','); }).join('\r\n');
+  try {
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const a = document.createElement('a'); a.href = url; a.download = 'koshbasshy-360-natije.csv';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+    toast('CSV файлы жүктелді');
+  } catch (e) { toast('Жүктеу мүмкін болмады. «Google кестеге жазу» батырмасын қолданыңыз.'); }
+}
+
+$app.addEventListener('submit', function (e) {
+  e.preventDefault();
+  if (e.target.id === 'f-login') doLogin();
+  if (e.target.id === 'f-admin') doAdmin(document.getElementById('pw').value);
+});
+
+$app.addEventListener('input', function (e) {
+  const id = e.target.id;
+  if (id === 'why' || id === 'general') S.draft[id] = e.target.value;
+  if (id === 'roster') S.rosterText = e.target.value;
+  if (id === 'code') S.code = e.target.value;
+});
+
+$app.addEventListener('change', function (e) {
+  const id = e.target.id;
+  if (id === 'nom1' || id === 'nom2') {
+    const k = id === 'nom1' ? 0 : 1;
+    const nom = [S.draft.nom[0] || '', S.draft.nom[1] || ''];
+    nom[k] = e.target.value;
+    if (nom[0] && nom[0] === nom[1]) nom[1] = '';
+    if (!nom[0] && nom[1]) { nom[0] = nom[1]; nom[1] = ''; }
+    S.draft.nom = nom.filter(Boolean);
+    render();
+  }
+});
+
+$app.addEventListener('click', async function (e) {
+  const b = e.target.closest('[data-act]');
+  if (!b || b.disabled) return;
+  const act = b.getAttribute('data-act');
+  const items = S.config ? itemsOf(S.config) : [];
+
+  if (act === 'rate') {
+    const it = items[S.step], t = b.getAttribute('data-t'), v = Number(b.getAttribute('data-v'));
+    S.draft.ratings[it.id] = S.draft.ratings[it.id] || {};
+    S.draft.ratings[it.id][t] = v;
+    const row = b.closest('.rrow');
+    row.querySelectorAll('.sc').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    row.classList.remove('missing');
+    const ring = document.querySelector('.top-right svg');
+    if (ring) ring.outerHTML = dial(30, progress());
+    return;
+  }
+  if (act === 'home') { if (S.view === 'admin' || S.view === 'adminLogin') go('home'); else if (S.person) go(S.draft.submitted ? 'done' : 'intro'); else go('home'); return; }
+  if (act === 'logout') {
+    Object.assign(S, { person: null, draft: null, report: null, adm: null, pw: '', demo: false, demoData: null, confirm: null, rater: null, openRow: null });
+    sess.set('k360-pw', null); local.set('k360-code', null); S.code = '';
+    go('home'); return;
+  }
+  if (act === 'adminLogin') { if (S.pw) { doAdmin(S.pw); } else go('adminLogin'); return; }
+  if (act === 'start') { S.step = Math.min(S.draft.step || 0, items.length - 1); S.missing = false; go(S.draft.step >= items.length ? 'final' : 'rate'); return; }
+  if (act === 'edit') { S.step = 0; S.missing = false; go('rate'); return; }
+  if (act === 'prev') {
+    if (S.view === 'final') { S.step = items.length - 1; go('rate'); }
+    else if (S.step > 0) { S.step--; S.missing = false; go('rate'); }
+    else go('intro');
+    return;
+  }
+  if (act === 'next') {
+    const it = items[S.step], r = S.draft.ratings[it.id] || {};
+    const miss = S.people.filter(function (p) { return r[p.id] == null; });
+    if (miss.length) {
+      S.missing = true; S.err = 'Барлық адамға баға қойыңыз. Бағалай алмасаңыз, «?» таңдаңыз.'; render();
+      const first = document.querySelector('.rrow.missing');
+      if (first) first.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      return;
+    }
+    S.missing = false;
+    const nextStep = S.step + 1;
+    if (!S.draft.submitted) S.draft.step = Math.max(S.draft.step || 0, nextStep);
+    if (!(await save())) return;
+    if (nextStep >= items.length) go('final'); else { S.step = nextStep; go('rate'); }
+    return;
+  }
+  if (act === 'submit') {
+    if (!S.draft.nom[0]) { S.err = 'Көшбасшы ретінде кемінде бір адамды таңдаңыз.'; render(); return; }
+    const prev = { step: S.draft.step, submitted: S.draft.submitted };
+    S.draft.step = items.length + 1; S.draft.submitted = true;
+    if (!(await save())) { S.draft.step = prev.step; S.draft.submitted = prev.submitted; render(); return; }
+    go('done'); return;
+  }
+  if (act === 'report') {
+    S.busy = true; S.err = ''; render();
+    try { S.report = await call('report', { code: S.code }); S.busy = false; go('report'); }
+    catch (e) { S.busy = false; S.err = e.message; render(); }
+    return;
+  }
+  if (act === 'back-done') { go('done'); return; }
+
+  /* әкімші */
+  if (act === 'tab') { S.tab = b.getAttribute('data-k'); S.err = ''; render(); return; }
+  if (act === 'row') { const id = b.getAttribute('data-id'); S.openRow = S.openRow === id ? null : id; render(); return; }
+  if (act === 'rater') { S.rater = b.getAttribute('data-id') || null; render(); if (S.rater) window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+  if (act === 'demo-on') { S.demo = true; S.demoData = null; S.openRow = null; render(); return; }
+  if (act === 'demo-off') { S.demo = false; S.openRow = null; S.rater = null; render(); return; }
+  if (act === 'refresh') { await adminCall('admin', {}, 'Жаңартылды'); return; }
+  if (act === 'toggle') { const k = b.getAttribute('data-k'); const p = {}; p[k] = !S.adm[k]; await adminCall('setSettings', p, 'Сақталды'); return; }
+  if (act === 'save-roster') {
+    const names = (S.rosterText != null ? S.rosterText : document.getElementById('roster').value).split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+    if (await adminCall('saveRoster', { names: names }, 'Тізім сақталды: ' + names.length + ' адам')) S.rosterText = null;
+    render(); return;
+  }
+  if (act === 'reset') {
+    const id = b.getAttribute('data-id');
+    S.confirm = { id: id, text: nameOf(id) + ' жауаптары толық өшіріледі. Ол тестті басынан өтеді.' }; render(); return;
+  }
+  if (act === 'confirm-no') { S.confirm = null; render(); return; }
+  if (act === 'confirm-yes') { const id = S.confirm.id; S.confirm = null; await adminCall('resetAnswer', { personId: id }, 'Жауап өшірілді'); return; }
+  if (act === 'copy-share') {
+    const ta = document.getElementById('share');
+    try { await navigator.clipboard.writeText(ta.value); toast('Көшірілді'); }
+    catch (err) { ta.focus(); ta.select(); toast('Мәтін белгіленді. Көшіру үшін Ctrl/⌘ + C басыңыз.'); }
+    return;
+  }
+  if (act === 'export-sheet') {
+    S.busy = true; render();
+    try { const r = await call('exportResults', { pw: S.pw, tables: resultTables() }); S.busy = false; render(); toast('Кестеге жазылды: «Нәтиже», «Матрица»'); if (r && r.url) S.adm.sheetUrl = r.url; }
+    catch (err) { S.busy = false; S.err = err.message; render(); }
+    return;
+  }
+  if (act === 'csv') { downloadCsv(); return; }
+});
+
+/* ---------- Мысал деректер (әкімшіге көрсету үшін, ешқайда сақталмайды) ---------- */
+function makeDemo(config, prefix, names) {
+  const items = itemsOf(config);
+  const L = 'АБВГДЕЖЗИКЛМ'.split('');
+  const people = names || L.map(function (l, i) { return { id: 'D' + i, name: 'Қатысушы ' + l, code: '—' }; });
+  const r = rng(360);
+  const lat = people.map(function () { return 2.3 + r() * 2.4; });
+  const cb = people.map(function () { const o = {}; config.comps.forEach(function (c) { o[c.id] = (r() - 0.5) * 1.1; }); return o; });
+  const len = people.map(function () { return (r() - 0.5) * 0.8; });
+  const whys = ['Топты ұйымдастырып, бәрін іске тартады.', 'Қиын сәтте шешім қабылдап, жауапкершілік алады.', 'Бәрін тыңдайды, сосын нақты жоспар ұсынады.', 'Өзі үлгі көрсетеді, айтқанын орындайды.', ''];
+  const gens = ['Тест қызықты болды.', '', 'Топта бірнеше адам көшбасшылық танытады деп ойлаймын.', ''];
+  const answers = people.map(function (rater, ri) {
+    const ratings = {};
+    items.forEach(function (it) {
+      ratings[it.id] = {};
+      people.forEach(function (t, ti) {
+        let v = lat[ti] + cb[ti][it.comp] + len[ri] + (ti === ri ? 0.35 : 0) + (r() - 0.5) * 1.3;
+        v = Math.max(1, Math.min(5, Math.round(v)));
+        if (ti !== ri && r() < 0.03) v = 0;
+        ratings[it.id][t.id] = v;
+      });
+    });
+    const pref = people.map(function (t, ti) { return { id: t.id, s: ti === ri ? -9 : lat[ti] + (r() - 0.5) * 1.2 }; }).sort(function (a, b) { return b.s - a.s; });
+    return { id: rater.id, name: rater.name, step: items.length + 1, submitted: true, updated: Date.now(),
+      data: { ratings: ratings, nom: [pref[0].id, pref[1].id], why: whys[Math.floor(r() * whys.length)], general: gens[Math.floor(r() * gens.length)], step: items.length + 1, submitted: true } };
+  });
+  return { people: people, answers: answers };
+}
+
+/* ---------- Жергілікті тексеру (Google Apps Script сыртында ғана іске қосылады) ---------- */
+function buildReport(people, answers, items, comps, pid, minRaters) {
+  const ids = new Set(people.map(p => p.id));
+  const subs = answers.filter(a => a.submitted && ids.has(a.id));
+  const others = subs.filter(a => a.id !== pid);
+  const mine = subs.find(a => a.id === pid);
+  const val = (a, it, t) => { const r = a.data.ratings && a.data.ratings[it.id]; const v = r && r[t]; return v >= 1 && v <= 5 ? v : null; };
+  const r2 = x => (x == null ? null : Math.round(x * 100) / 100);
+  const raters = others.filter(a => items.some(it => val(a, it, pid) != null)).length;
+  const show = raters >= minRaters;
+  const pick = (list, its, target) => { const out = []; list.forEach(a => its.forEach(it => { const v = val(a, it, target); if (v != null) out.push(v); })); return out; };
+  const groupVals = its => { const out = []; subs.forEach(a => people.forEach(p => { if (p.id === a.id) return; its.forEach(it => { const v = val(a, it, p.id); if (v != null) out.push(v); }); })); return out; };
+  const me = people.find(p => p.id === pid) || { name: '' };
+  return {
+    name: me.name, raters, minRaters, show, total: subs.length,
+    others: show ? r2(mean(pick(others, items, pid))) : null,
+    self: mine ? r2(mean(pick([mine], items, pid))) : null,
+    group: r2(mean(groupVals(items))),
+    comps: comps.map(c => { const its = items.filter(i => i.comp === c.id); return { id: c.id, name: c.name, others: show ? r2(mean(pick(others, its, pid))) : null, self: mine ? r2(mean(pick([mine], its, pid))) : null, group: r2(mean(groupVals(its))) }; }),
+    items: items.map(it => ({ id: it.id, comp: it.comp, text: it.text, others: show ? r2(mean(pick(others, [it], pid))) : null, self: mine ? val(mine, it, pid) : null })),
+    nom1: others.filter(a => a.data.nom && a.data.nom[0] === pid).length,
+    nom2: others.filter(a => a.data.nom && a.data.nom[1] === pid).length,
+    why: show ? others.filter(a => a.data.nom && a.data.nom[0] === pid && a.data.why).map(a => a.data.why).sort() : [],
+  };
+}
+
+const Mock = {
+  config: {
+    scale: [{ v: 1, t: 'Ешқашан' }, { v: 2, t: 'Сирек' }, { v: 3, t: 'Кейде' }, { v: 4, t: 'Жиі' }, { v: 5, t: 'Әрқашан' }],
+    comps: [
+      { id: 'vision', name: 'Бағыт беру', items: [{ id: 'v1', text: 'Топтық жұмыстың мақсатын бәріне түсінікті етіп жеткізеді' }, { id: 'v2', text: 'Жұмысты жоспарлап, кімнің не істейтінін ұйымдастырады' }] },
+      { id: 'decide', name: 'Шешім қабылдау', items: [{ id: 'd1', text: 'Топ ойланып қалғанда, шешім ұсынып, жұмысты алға жылжытады' }, { id: 'd2', text: 'Шешімінің нәтижесі үшін жауапкершілікті өзіне алады' }] },
+      { id: 'comm', name: 'Коммуникация', items: [{ id: 'c1', text: 'Ойын нақты, түсінікті және сенімді жеткізеді' }, { id: 'c2', text: 'Өзгелерді мұқият тыңдап, пікіріне құрметпен қарайды' }] },
+      { id: 'inspire', name: 'Ықпал ету', items: [{ id: 'i1', text: 'Топтастарын іске ынталандырып, жігерлендіре алады' }, { id: 'i2', text: 'Сөзі мен ісі сәйкес келеді, өзгелерге үлгі болады' }] },
+      { id: 'team', name: 'Командамен жұмыс', items: [{ id: 't1', text: 'Топтағы әр адамды жұмысқа тартып, үлесін ескереді' }, { id: 't2', text: 'Келіспеушілікті сабырлы әрі әділ шешеді' }] },
+      { id: 'init', name: 'Бастамашылдық', items: [{ id: 'n1', text: 'Нұсқау күтпей, өзі бастама көтереді' }, { id: 'n2', text: 'Қиын болса да, тапсырманы соңына дейін жеткізеді' }] },
+    ],
+  },
+  load() {
+    let st = null;
+    try { st = JSON.parse(local.get('k360-mock') || 'null'); } catch (e) {}
+    if (!st) {
+      const people = []; for (let i = 1; i <= 12; i++) people.push({ id: 'T' + i, name: 'Тест қатысушы ' + i, code: 'TEST' + String(i).padStart(2, '0') });
+      const demo = makeDemo(this.config, null, people);
+      const answers = {}; demo.answers.slice(1, 10).forEach(a => { answers[a.id] = a; });
+      st = { people, answers, open: true, reportsOpen: true };
+    }
+    return st;
+  },
+  persist(st) { local.set('k360-mock', JSON.stringify(st)); },
+  data(st) { return { people: st.people, answers: Object.values(st.answers), open: st.open, reportsOpen: st.reportsOpen, config: this.config, minRaters: 3, sheetUrl: '', appUrl: '' }; },
+  api(req) {
+    const self = this;
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
+        const st = self.load();
+        const who = () => { const p = st.people.find(x => x.code === String(req.code || '').toUpperCase()); if (!p) throw new Error('Код табылмады. Әріптерді тексеріп, қайта енгізіңіз.'); return p; };
+        const pw = () => { if (req.pw !== 'local-test') throw new Error('Құпиясөз қате.'); };
+        try {
+          let out;
+          if (req.action === 'login') { const p = who(); const a = st.answers[p.id]; out = { person: { id: p.id, name: p.name }, people: st.people.map(x => ({ id: x.id, name: x.name })), answer: a ? a.data : null, open: st.open, reportsOpen: st.reportsOpen, config: self.config }; }
+          else if (req.action === 'save') { const p = who(); if (!st.open) throw new Error('Тест жабық. Әкімшіге хабарласыңыз.'); const d = JSON.parse(JSON.stringify(req.data)); st.answers[p.id] = { id: p.id, name: p.name, step: d.step, submitted: d.submitted, updated: Date.now(), data: d }; out = { saved: Date.now() }; }
+          else if (req.action === 'report') { const p = who(); if (!st.reportsOpen) throw new Error('Нәтижелер әлі ашылған жоқ.'); out = buildReport(st.people, Object.values(st.answers), itemsOf(self.config), self.config.comps, p.id, 3); }
+          else if (req.action === 'admin') { pw(); out = self.data(st); }
+          else if (req.action === 'saveRoster') { pw(); st.people = req.names.map((n, i) => st.people.find(p => p.name === n) || { id: 'N' + Date.now() + i, name: n, code: Math.random().toString(36).slice(2, 8).toUpperCase() }); out = self.data(st); }
+          else if (req.action === 'setSettings') { pw(); ['open', 'reportsOpen'].forEach(k => { if (typeof req[k] === 'boolean') st[k] = req[k]; }); out = self.data(st); }
+          else if (req.action === 'resetAnswer') { pw(); delete st.answers[req.personId]; out = self.data(st); }
+          else if (req.action === 'exportResults') { pw(); out = { url: '' }; }
+          else throw new Error('Белгісіз әрекет');
+          self.persist(st);
+          resolve(JSON.parse(JSON.stringify(out)));
+        } catch (e) { reject(e); }
+      }, 250);
+    });
+  },
+};
+
+/* ---------- Іске қосу ---------- */
+if (USE_MOCK) document.getElementById('dev').hidden = false;
+render();
+if (S.code && !S.pw) doLogin();
+})();
+</script>
+</body>
+</html>
